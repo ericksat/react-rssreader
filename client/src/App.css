@@ -20,7 +20,7 @@
     margin-top: 1rem;
     color: "#333";
     display: flex;
-    height: calc(100vh - 9rem);
+    height: calc(100vh - 13rem);
 }
 
 .App-title {
@@ -41,14 +41,12 @@
 }
 
 footer {
-    position: fixed;
     background-color: white;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
+    text-align: center;
+    height: 4rem;
     width: 100%;
     border: 1px solid lightgrey;
-    padding: 16px;
+    padding: 1rem 0 0;
 }
 
 .sidebar {
@@ -58,11 +56,53 @@ footer {
 }
 
 .sidebar__header {
-    margin-bottom: 2rem;
+    padding: 2rem 0 1rem;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar__header__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar__header__add {
+    font-size: 1.75rem !important;
+    flex-grow: 1;
+    margin: 0 1rem;
+}
+
+.sidebar__sitelist {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sitelist__item {
+    flex-grow: 1;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    color: black;
+    display: flex;
+    flex-direction: row;
+}
+
+.sitelist__item__title {
+    flex-grow: 1;
+    font-style: italic;
 }
 
 .main-panel {
     background-color: white;
     flex-grow: 1;
+    overflow: auto;
+}
+
+.btn {
+    background-color: red;
+    border: 1px solid orange;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
 }
