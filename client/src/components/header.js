@@ -1,10 +1,12 @@
 import React from 'react';
 
+import Loader from './loader';
+
 export default (props) => {
     return (<header className="App-header">
         <h1 className="App-title">
             {props.title}
-            <img src={props.logo} className="App-logo" alt="logo" />
+            <Loader size="32" />
         </h1>
     </header>);
 }

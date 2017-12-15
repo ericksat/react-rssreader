@@ -5,7 +5,6 @@
 
 .App-logo {
     animation: App-logo-spin infinite 20s linear;
-    height: 32px;
     position: relative;
     top: 5px;
 }
@@ -56,6 +55,11 @@ footer {
     margin-right: 1rem;
     background-color: white;
     width: 25rem;
+}
+
+.sidebar__header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
 }
 
 .main-panel {
