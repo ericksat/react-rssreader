@@ -1,19 +1,46 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const axios = require('axios');
+const fs = require("fs");
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    // Comment out this line:
-    //res.send('respond with a resource');
+const rssParser = require('./rssparser').default;
 
-    // And insert something like this instead:
-    res.json([{
-        id: 1,
-        username: "samsepi0l"
-    }, {
-        id: 2,
-        username: "D0loresH4ze"
-    }]);
+const app = express();
+
+app.set("port", process.env.PORT || 3001);
+
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+}
+
+const siteList = [
+    {
+        _id: 1,
+        title: "Rational Male",
+        url: "https://therationalmale.com/feed/"
+    },
+    {
+        _id: 2,
+        title: "VDH",
+        url: "http://victorhanson.com/wordpress/feed/"
+    },
+];
+
+app.get("/sites", (req, res) => {
+    res.send({success: true, sites: siteList});
 });
 
-module.exports = router;
+app.get("/rss/:url", async (req, res) => {
+    let url = req.params.url;
+    console.log("fetching", url);
+    let content = await rssParser(url);
+    res.send(content);
+});
+
+app.listen(app.get("port"), () => {
+    console.log(`Find the server at: http://localhost:${app.get("port")}/`); // eslint-disable-line no-console
+});
+
+
+// TODO: this should only happen in development
+require('./start-client.js');
