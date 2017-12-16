@@ -5,40 +5,65 @@ export default class Editor extends React.Component {
         super(props);
 
         this.state = {
-            edited: null,
+            id: "",
             title: "",
             url: ""
         }
     }
 
-    onSubmit(e) {
-        e.preventDefault();
-        let form = e.target;
-        let site = {
-            title: form.title.value.trim(),
-            url: form.url.value.trim()
-        }
-        if (site.title.length > 0 && site.url.length > 0) {
-            this.addSite(site);
+    componentWillMount() {
+        this.fillState(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // Compare editor site
+        if ( (nextProps.editorSite === null && this.props.id !== "") ||
+                nextProps.editorSite._id !== this.props.id ) {
+            this.fillState(nextProps);
         }
     }
 
-    addSite(site) {
+    fillState(props) {
+        if (props.editorSite != null) {
+            this.setState({
+                title: props.editorSite.title,
+                url: props.editorSite.url,
+                id: props.editorSite._id
+            });
+        } else {
+            this.setState({
+                title: "",
+                id: "",
+                url: ""
+            })
+        }
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        let site = {
+            title: this.state.title.trim(),
+            url: this.state.url.trim(),
+        }
+        if (site.title.length > 0 && site.url.length > 0) {
+            this.saveSite(this.state.id, site);
+        }
+    }
+
+    /** Updates or inserts site */
+    saveSite(id, site) {
         let opts = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: "POST",
-            body: JSON.stringify({ site, test: "1", "fucku": true })
+            method: id ? "PUT" : "POST",
+            body: JSON.stringify({ site })
         };
+        let url = id ? "/sites/" + id : "/sites";
 
-        fetch("/sites", opts).then((res) => res.json()).then((json) => {
+        fetch(url, opts).then((res) => res.json()).then((json) => {
             if (json.success) {
-                this.setState({
-                    title: "",
-                    url: ""
-                })
                 this.props.refreshParent();
             }
         })

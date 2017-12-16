@@ -16,13 +16,13 @@ class App extends Component {
             sites: [],
             selectedSite: null,
             editorOpen: false,
-            editorId: null
+            editorSite: null
         }
     }
 
     selectSite(id) {
-        // console.log("Received final url", url)
-        this.setState({selectedSite: id, editorOpen: false})
+        // console.log("Received final id", id)
+        this.setState({selectedSite: id, editorOpen: false, editorSite: null})
     }
 
     deleteSite(id) {
@@ -43,6 +43,7 @@ class App extends Component {
     }
 
     fetchSites() {
+        this.closeEditor();
         // Test express
         fetch("/sites").then((res) => res.json()).then((res) => {
             // TODO: Handle error
@@ -55,7 +56,18 @@ class App extends Component {
     openAddSite() {
         this.setState({
             editorOpen: true,
-            editorId: null
+            editorSite: null,
+            selectedSite: null
+        })
+    }
+
+    openEditSite(id) {
+        // Find the site
+        let site = this.state.sites.find((site) => site._id === id);
+        this.setState({
+            editorOpen: true,
+            editorSite: site,
+            selectedSite: null
         })
     }
 
@@ -65,7 +77,7 @@ class App extends Component {
     }
 
     closeEditor() {
-        this.setState({ editorOpen: false });
+        this.setState({ editorOpen: false, editorSite: null, selectedSite: null });
     }
 
   render() {
@@ -73,9 +85,10 @@ class App extends Component {
       <div className="App">
         <Header title="Welcome to RSS Reader&trade;" />
         <div className="content content--main">
-            <SideBar sites={this.state.sites} selectSite={this.selectSite.bind(this)} deleteSite={this.deleteSite.bind(this)} onAddSite={this.openAddSite.bind(this)} />
+            <SideBar sites={this.state.sites} selectSite={this.selectSite.bind(this)} deleteSite={this.deleteSite.bind(this)}
+                    editSite={this.openEditSite.bind(this)} onAddSite={this.openAddSite.bind(this)} />
             { this.state.editorOpen ?  // So ugly
-                <Editor editorId={this.state.editorId} refreshParent={this.fetchSites.bind(this)} onCancel={this.closeEditor.bind(this)} /> :
+                <Editor editorSite={this.state.editorSite} refreshParent={this.fetchSites.bind(this)} onCancel={this.closeEditor.bind(this)} /> :
                 <MainContent selected={this.state.selectedSite} />
             }
         </div>

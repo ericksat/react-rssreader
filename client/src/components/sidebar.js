@@ -1,23 +1,26 @@
 import React from 'react';
 
 import SideBarHeader from './sidebar-header';
-import RssSite from './rss-site';
+import SideBarSite from './sidebar-site';
 
 export default class SideBar extends React.Component {
 
     renderSiteList() {
         return this.props.sites.map((site) => {
-            return <RssSite key={site._id} site={site} />
+            return <SideBarSite key={site._id} site={site} />
         });
     }
 
     onSiteListClick(e) {
         // See if it's a select event, or a delete one (or edit in the future)
         let type = e.target.getAttribute('data-role');
+        let id = e.target.getAttribute('data-id');
         if (type === "select") {
-            this.selectSite(e.target.getAttribute('data-id'));
+            this.selectSite(id);
         } else if (type === "delete") {
-            this.deleteSite(e.target.getAttribute('data-id'));
+            this.deleteSite(id);
+        } else if (type === "edit") {
+            this.editSite(id)
         }
     }
 
@@ -28,6 +31,10 @@ export default class SideBar extends React.Component {
 
     deleteSite(id) {
         this.props.deleteSite(id);
+    }
+
+    editSite(id) {
+        this.props.editSite(id);
     }
 
     onAddSite() {

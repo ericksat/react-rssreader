@@ -86,6 +86,7 @@ footer {
     color: black;
     display: flex;
     flex-direction: row;
+    cursor: pointer;
 }
 
 .sitelist__item__title {

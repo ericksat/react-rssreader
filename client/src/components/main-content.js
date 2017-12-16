@@ -14,26 +14,38 @@ export default class MainContent extends React.Component {
         this.limit = 80; // Character limit for fetched items
     }
 
-    componentWillUpdate(nextProps) {
-        if (nextProps.selected === this.props.selected) return;
-        // console.log("Updating main content", nextProps.selected, this.props.selected);
-        if (nextProps.selected) { // Fetch
-            this.setState({ data: null, loading: true });
-            let url = "/rss/" + nextProps.selected;
-            // console.log("Will fetch", url);
-            fetch(url).then((res) => res.json()).then((json) => {
-            // console.log(json);
-                this.setState({
-                    loading: false,
-                    data: {
-                        title: json.title[0],
-                        description: json.description[0],
-                        image: json.image ? json.image[0] : undefined,
-                        items: json.items
-                    }
-                });
-            })
+    componentWillMount() {
+        // console.log("Mounting main content");
+        this.fetchRss(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.selected === this.props.selected) {
+            // console.log("Nextprops equals current content props.");
+            return;
         }
+        // console.log("Updating main content", nextProps.selected, this.props.selected);
+        this.fetchRss(nextProps);
+    }
+
+    fetchRss(props) {
+        if (!props.selected) return;
+        // Fetch
+        this.setState({ data: null, loading: true });
+        let url = "/rss/" + props.selected;
+        // console.log("Will fetch", url);
+        fetch(url).then((res) => res.json()).then((json) => {
+            // console.log(json);
+            this.setState({
+                loading: false,
+                data: {
+                    title: json.title[0],
+                    description: json.description[0],
+                    image: json.image ? json.image[0] : undefined,
+                    items: json.items
+                }
+            });
+        })
     }
 
     renderItems() {

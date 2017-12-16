@@ -60,7 +60,7 @@ app.post('/sites', (req, res) => {
 });
 
 app.put('/sites/:id', (req, res) => {
-    let site = req.body.site;
+    let attributes = req.body.site;
     let id = req.params.id;
     siteModel.findByIdAndUpdate(id, attributes).then(() => {
         sites = null;
