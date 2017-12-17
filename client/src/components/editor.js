@@ -9,6 +9,9 @@ export default class Editor extends React.Component {
             title: "",
             url: ""
         }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     componentWillMount() {
@@ -46,27 +49,8 @@ export default class Editor extends React.Component {
             url: this.state.url.trim(),
         }
         if (site.title.length > 0 && site.url.length > 0) {
-            this.saveSite(this.state.id, site);
+            this.props.saveSite(this.state.id, site);
         }
-    }
-
-    /** Updates or inserts site */
-    saveSite(id, site) {
-        let opts = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: id ? "PUT" : "POST",
-            body: JSON.stringify({ site })
-        };
-        let url = id ? "/sites/" + id : "/sites";
-
-        fetch(url, opts).then((res) => res.json()).then((json) => {
-            if (json.success) {
-                this.props.refreshParent();
-            }
-        })
     }
 
     handleChange(e) {
@@ -74,12 +58,14 @@ export default class Editor extends React.Component {
     }
 
     render() {
+        let classes = this.props.show ? ["editor"] : ["editor hidden"];
+
         return (
-            <div className="editor">
+            <div className={classes}>
                 <h1>Editor</h1>
-                <form onSubmit={this.onSubmit.bind(this)}>
-                    <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange.bind(this)} />
-                    <input type="text" name="url" placeholder="URL" value={this.state.url} onChange={this.handleChange.bind(this)} />
+                <form onSubmit={this.onSubmit}>
+                    <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange} />
+                    <input type="text" name="url" placeholder="URL" value={this.state.url} onChange={this.handleChange} />
                     <button type="submit" className="btn btn-primary">Submit</button>
                     <button type="button" className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
                 </form>

@@ -1,9 +1,9 @@
-// TODO: Site navigator: add, edit, remove
-// TODO: Handle errors when trying to fetch remote data.
+// TODO: Improve RSSParser to keep less data, less arrays. Only send the minimum to client (it's being done on the client right now.)
+// TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.
 // TODO: Update design.
 // TODO: Deploy to github and heroku.
-// TODO: Update site list immediately on add, edit, remove - and cancel on error
+
 
 const express = require("express");
 const axios = require('axios');
@@ -14,8 +14,6 @@ const rssParser = require('./app/rssparser').default;
 const db = require('./app/db');
 // Models
 const siteModel = require('./app/site');
-// Store these in memory for now
-let sites = null;
 
 const app = express();
 
@@ -32,10 +30,6 @@ app.use(bodyParser.json())
 // SITES ROUTES
 
 app.get("/sites", (req, res) => {
-    if (sites) { // From memory cache
-        res.send({ success: true, sites });
-        return;
-    }
     siteModel.find({}).then((result) => {
         sites = result; // Fill global object and store
         res.send({ success: true, sites });
@@ -53,7 +47,6 @@ app.post('/sites', (req, res) => {
     console.log("Posting site", site);
     let model = new siteModel(site);
     model.save().then(() => {
-        sites = null; // Need refresh
         console.log("Added new model");
         res.send({success: true, id: model._id});
     });
@@ -63,30 +56,32 @@ app.put('/sites/:id', (req, res) => {
     let attributes = req.body.site;
     let id = req.params.id;
     siteModel.findByIdAndUpdate(id, attributes).then(() => {
-        sites = null;
         res.send({success: true});
     });
 });
 
 app.delete('/sites/:id', (req, res) => {
+    setTimeout(() => {
     let id = req.params.id;
     siteModel.findByIdAndRemove(id).then(() => {
-        sites = null;
         res.send({ success: true });
     });
+    }, 2000);
 });
 
 // RSS ROUTES
 
 app.get("/rss/:id", async (req, res) => {
-    let found = sites.find((site) => site._id == req.params.id);
-    let url = found ? found.url : undefined;
-    if (url) {
-        console.log("fetching", url);
-        let content = await rssParser(url);
+    try {
+        // console.log("Looking for", req.params.id)
+        let found = await siteModel.findById(req.params.id);
+        // console.log(found);
+        if (!found || !found.url) throw new Error("ID Not found!");
+        // console.log("fetching", found.url);
+        let content = await rssParser(found.url);
         res.send(content);
-    } else {
-        res.send({success: false, error: "ID not found"});
+    } catch (e) {
+        res.send({ success: false, error: "ID not found" });
     }
 });
 

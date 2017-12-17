@@ -2,7 +2,7 @@ import React from 'react';
 
 import Loader from './loader';
 
-export default (props) => {
+const Header = (props) => {
     return (<header className="App-header">
         <h1 className="App-title">
             {props.title}
@@ -10,3 +10,5 @@ export default (props) => {
         </h1>
     </header>);
 }
+
+export default Header;

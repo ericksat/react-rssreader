@@ -9,13 +9,14 @@ export default class MainContent extends React.Component {
 
         this.state = {
             data: null,
-            loading: false
+            loading: false,
+            error: null
         }
         this.limit = 80; // Character limit for fetched items
     }
 
     componentWillMount() {
-        // console.log("Mounting main content");
+        console.log("Mounting main content");
         this.fetchRss(this.props);
     }
 
@@ -31,10 +32,13 @@ export default class MainContent extends React.Component {
     fetchRss(props) {
         if (!props.selected) return;
         // Fetch
-        this.setState({ data: null, loading: true });
+        this.setState({ data: null, loading: true, error: null });
         let url = "/rss/" + props.selected;
         // console.log("Will fetch", url);
         fetch(url).then((res) => res.json()).then((json) => {
+            if (json.error) {
+                throw new Error(json.error);
+            }
             // console.log(json);
             this.setState({
                 loading: false,
@@ -45,7 +49,13 @@ export default class MainContent extends React.Component {
                     items: json.items
                 }
             });
-        })
+        }).catch((e) => {
+            this.setState({
+                error: e.message,
+                loading: false,
+                data: null
+            });
+        });
     }
 
     renderItems() {
@@ -66,8 +76,11 @@ export default class MainContent extends React.Component {
     }
 
     render() {
+        let classes = this.props.show ? ["main-panel"] : ["main-panel hidden"];
+
         return (
-            <div className="main-panel">
+            <div className={classes}>
+                {this.state.error && (<div class="main-panel__error">Error: {this.state.error}</div>) }
                 {this.state.loading && <Loader size="120" />}
                 { this.state.data ? this.renderRss() : undefined }
             </div>

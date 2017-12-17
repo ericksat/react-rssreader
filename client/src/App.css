@@ -53,6 +53,7 @@ footer {
     margin-right: 1rem;
     background-color: white;
     width: 25rem;
+    min-width: 25rem;
 }
 
 .sidebar__header {
@@ -89,6 +90,10 @@ footer {
     cursor: pointer;
 }
 
+.sitelist__item__title:hover {
+    background-color: #ddd;
+}
+
 .sitelist__item__title {
     flex-grow: 1;
     font-style: italic;
@@ -106,4 +111,16 @@ footer {
     color: white;
     font-weight: bold;
     padding: 0.5rem 1rem;
+}
+
+.btn:hover {
+    background-color: orange;
+    border: 1px solid red;
+}
+
+.main-panel__error {
+    margin: 4rem;
+    font-size: 2rem;
+    color: red;
+    font-weight: bold;
 }
