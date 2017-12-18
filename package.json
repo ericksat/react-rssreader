@@ -4,12 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "echo \"This command has been deprecated. Use 'npm start'\" && exit 1",
+    "start": "node index.js",
     "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "8.9.3"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",

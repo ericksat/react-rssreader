@@ -21,8 +21,8 @@ const app = express();
 
 app.set("port", process.env.PORT || 3001);
 
-console.log(process.env.NODE_ENV);
-process.env.NODE_ENV = "production";
+// console.log(process.env.NODE_ENV);
+// process.env.NODE_ENV = "production";
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
