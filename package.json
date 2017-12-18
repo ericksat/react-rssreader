@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "license": "ISC",
