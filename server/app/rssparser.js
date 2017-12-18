@@ -1,38 +1,52 @@
-var axios = require('cachios')
+const axios = require('cachios')
 const promisify = require('util').promisify
-var xmlParse = promisify(require('xml2js').parseString);
+const xmlParse = promisify(require('xml2js').parseString);
+const formatOpts = { ignoreAttrs: true, explicitArray: false }; // Used by xmlParse
+
+const arrayOrStringOrNothing = (input, defaultValue = "") => {
+    if (!input) return defaultValue;
+    if (typeof input === "string") {
+        return input.replace(/<(?:.|\n)*?>/gm, '');
+    } else if (typeof input === "object") { // Found this monster in my old Superkids RSS
+        // console.log("Input is not a string");
+        // console.log(JSON.stringify(input, null, 2));
+        let text = "";
+        for (let key in input) {
+            text += input[key] + " ";
+        }
+        return text;
+    }
+};
+
+const parseImage = (input, defaultValue = "") => {
+    if (!input) return defaultValue;
+    return arrayOrStringOrNothing(input.url);
+};
 
 const formatContent = async (xmlContent) => {
     // console.log(xmlContent);
-    let full = await xmlParse(xmlContent)
-    let channel = full.rss.channel[0];
+    let full = await xmlParse(xmlContent, formatOpts);
+    let channel = full.rss.channel;
     let finalItems = [];
 
     for (let item of channel.item) {
-        let description = "";
-        if (item.description) {
-             if (item.description[0]) description = item.description[0];
-             else description = item.description;
-        }
-
         finalItems.push({
-            title: item.title[0] || "Untitled",
+            title: arrayOrStringOrNothing(item.title, "Untitled"),
             pubDate: new Date(item.pubDate),
-            link: item.link[0] || "No link",
-            description
-        })
-    }
-    var formatted = {
-        title: channel.title[0] || "Untitled",
-        image: channel.image? channel.image[0].url[0] : undefined,
-        link: channel.link ? channel.link[0] : undefined,
-        buildDate: new Date(channel.lastBuildDate),
-        description: channel.description[0] || "",
-        items: finalItems
+            link: arrayOrStringOrNothing(item.link, "No link"),
+            description: arrayOrStringOrNothing(item.description, "")
+        });
     }
 
-    return formatted;
-}
+    return {
+        title: arrayOrStringOrNothing(channel.title, "Untitled"),
+        image: parseImage(channel.image, null),
+        link: arrayOrStringOrNothing(channel.link, null),
+        buildDate: new Date(channel.lastBuildDate),
+        description: arrayOrStringOrNothing(channel.description, ""),
+        items: finalItems
+    };
+};
 
 const request = async (url) => {
     try {

@@ -4,7 +4,8 @@
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.
 // TODO: Update design.
-// TODO: Deploy to github and heroku.
+
+// NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client.
 
 const express = require("express");
 const axios = require('axios');
