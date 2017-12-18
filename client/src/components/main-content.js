@@ -42,12 +42,7 @@ export default class MainContent extends React.Component {
             // console.log(json);
             this.setState({
                 loading: false,
-                data: {
-                    title: json.title[0],
-                    description: json.description[0],
-                    image: json.image ? json.image[0] : undefined,
-                    items: json.items
-                }
+                data: json.channel
             });
         }).catch((e) => {
             this.setState({
@@ -65,24 +60,23 @@ export default class MainContent extends React.Component {
         }));
     }
 
-    renderRss() {
-        return (
-        <div className="rss-container">
-            <h1>{this.state.data.title}</h1>
-            <h2>{this.state.data.description}</h2>
-            {this.renderItems()}
-        </div>
-        );
-    }
-
     render() {
         let classes = this.props.show ? ["main-panel"] : ["main-panel hidden"];
+        let rssMain = this.state.data ? (
+        <div className="main-rss">
+            <div className="main-rss__header">
+                {this.state.data.image && <img className="main-rss__header__image" src={this.state.data.image} alt="Icon" /> }
+                <h1 className="main-rss__header__title">{this.state.data.title}</h1>
+            </div>
+            <h2 className="main-rss__description">{this.state.data.description}</h2>
+            {this.renderItems()}
+        </div>) : undefined;
 
         return (
             <div className={classes}>
-                {this.state.error && (<div class="main-panel__error">Error: {this.state.error}</div>) }
+                {this.state.error && (<div className="main-panel__error">Error: {this.state.error}</div>) }
                 {this.state.loading && <Loader size="120" />}
-                { this.state.data ? this.renderRss() : undefined }
+                { rssMain }
             </div>
         );
     }
