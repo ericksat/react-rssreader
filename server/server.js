@@ -1,14 +1,16 @@
-// TODO: Improve RSSParser to keep less data, less arrays. Only send the minimum to client (it's being done on the client right now.)
+// TODO: Post design, show dates properly using moment.js.
+// TODO: Switch the localStorage (?) Look into indexedDB and such, maybe they're mature and easier to work with?
+// TODO: Storage could also help us when remotely checking if there are new entries.
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.
 // TODO: Update design.
 // TODO: Deploy to github and heroku.
 
-
 const express = require("express");
 const axios = require('axios');
 // const fs = require("fs");
 const bodyParser = require('body-parser')
+const path = require('path');
 
 const rssParser = require('./app/rssparser').default;
 const db = require('./app/db');
@@ -19,15 +21,21 @@ const app = express();
 
 app.set("port", process.env.PORT || 3001);
 
+console.log(process.env.NODE_ENV);
+process.env.NODE_ENV = "production";
+
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static("client/build"));
+    app.use(express.static(path.join(__dirname, "/../client/build")));
 }
 
 // Middleware
 app.use(bodyParser.json())
 
 // SITES ROUTES
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, '/../client/build/index.html'));
+})
 
 app.get("/sites", (req, res) => {
     siteModel.find({}).then((result) => {
@@ -78,8 +86,8 @@ app.get("/rss/:id", async (req, res) => {
         // console.log(found);
         if (!found || !found.url) throw new Error("ID Not found!");
         // console.log("fetching", found.url);
-        let content = await rssParser(found.url);
-        res.send(content);
+        let channel = await rssParser(found.url);
+        res.send({ success: true, channel });
     } catch (e) {
         res.send({ success: false, error: "ID not found" });
     }

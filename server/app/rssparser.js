@@ -4,9 +4,9 @@ var xmlParse = promisify(require('xml2js').parseString);
 
 const formatContent = async (xmlContent) => {
     // console.log(xmlContent);
-    var full = await xmlParse(xmlContent)
-    var channel = full.rss.channel[0];
-    var finalItems = [];
+    let full = await xmlParse(xmlContent)
+    let channel = full.rss.channel[0];
+    let finalItems = [];
 
     for (let item of channel.item) {
         let description = "";
@@ -23,13 +23,14 @@ const formatContent = async (xmlContent) => {
         })
     }
     var formatted = {
-        title: channel.title,
-        image: channel.image,
-        link: channel.link,
+        title: channel.title[0] || "Untitled",
+        image: channel.image? channel.image[0].url[0] : undefined,
+        link: channel.link ? channel.link[0] : undefined,
         buildDate: new Date(channel.lastBuildDate),
-        description: channel.description,
+        description: channel.description[0] || "",
         items: finalItems
     }
+
     return formatted;
 }
 
