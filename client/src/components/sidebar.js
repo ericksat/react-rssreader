@@ -4,14 +4,26 @@ import SideBarHeader from './sidebar-header';
 import SideBarSite from './sidebar-site';
 
 export default class SideBar extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selected: null
+        };
+    }
 
     renderSiteList() {
-        return this.props.sites.map((site) => {
-            return <SideBarSite key={site._id} site={site} />
+        function cmp(a, b) {
+            return a.title.localeCompare(b.title);
+        }
+        // The concat creates a copy of the array
+        return this.props.sites.concat().sort(cmp).map((site) => {
+            return <SideBarSite key={site._id} site={site} active={this.state.selected === site._id} />
         });
     }
 
     onSiteListClick(e) {
+        e.stopPropagation();
         // See if it's a select event, or a delete one (or edit in the future)
         let type = e.target.getAttribute('data-role');
         let id = e.target.getAttribute('data-id');
@@ -27,6 +39,7 @@ export default class SideBar extends React.Component {
     selectSite(id) {
         // console.log("Selected url", url);
         this.props.selectSite(id);
+        this.setState({selected: id});
     }
 
     deleteSite(id) {

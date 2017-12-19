@@ -37,7 +37,9 @@
 }
 
 .poofoo {
-    color: purple;
+    color: darkgray;
+    font-style: italic;
+    font-size: 1.35rem;
 }
 
 footer {
@@ -52,8 +54,15 @@ footer {
 .sidebar {
     margin-right: 1rem;
     background-color: white;
-    width: 25rem;
     min-width: 25rem;
+    width: 25rem;
+}
+
+@media (min-width: 900px) {
+    .sidebar {
+        min-width: 30rem;
+        width: 30rem;
+    }
 }
 
 .sidebar__header {
@@ -82,21 +91,41 @@ footer {
 
 .sitelist__item {
     flex-grow: 1;
-    padding: 1rem;
-    border: 1px solid #ddd;
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-left: 4px solid transparent;
     color: black;
     display: flex;
     flex-direction: row;
-    cursor: pointer;
 }
 
-.sitelist__item__title:hover {
-    background-color: #ddd;
+.sitelist__item--active {
+    border-left: 4px solid lightcoral;
 }
 
 .sitelist__item__title {
     flex-grow: 1;
     font-style: italic;
+    font-size: 1.35rem;
+    font-weight: bold;
+    padding: 0 1rem 0 0.5rem;
+    line-height: 4rem;
+    cursor: pointer;
+}
+
+.sitelist__item__edit {
+    margin-right: 0.25rem;
+    padding: 0px 1rem 0.5rem 0.75rem !important;
+    font-size: 1.75rem;
+}
+
+.sitelist__item__delete {
+    background-color: red !important;
+    padding: 0.5rem 1.1rem !important;
+    font-size: 1.75rem;
+}
+
+.sitelist__item__delete:hover {
+    background-color: coral !important;
 }
 
 .main-panel {
@@ -106,16 +135,15 @@ footer {
 }
 
 .btn {
-    background-color: red;
-    border: 1px solid orange;
+    background-color: lightcoral;
+    border: 1px solid darkred;
     color: white;
     font-weight: bold;
     padding: 0.5rem 1rem;
 }
 
 .btn:hover {
-    background-color: orange;
-    border: 1px solid red;
+    background-color: coral;
 }
 
 .main-panel__error {
@@ -152,4 +180,69 @@ footer {
 
 .rss__item {
     padding: 0 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rss__item__link { /* Also a title */
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: lightcoral;
+    font-weight: bold;
+    text-decoration: none;
+    font-variant: small-caps;
+}
+
+.rss__item__link:hover {
+    color: orange;
+}
+
+.rss__item__time {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: darkgrey;
+    padding-bottom: 1rem;
+}
+
+.rss__item__description {
+    color: black;
+    font-size: 1.35rem;
+}
+
+.editor {
+    flex-grow: 1;
+}
+
+.editor__title {
+    font-size: 2.5rem;
+    margin: 2rem 1rem 0;
+}
+
+.editor__form {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.editor__form input {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.editor__form div {
+    margin-top: 1rem;
+}
+
+.editor__form button {
+    font-size: 2rem;
+    margin: 0 0.5rem;
+}
+
+.btn--secondary {
+    background-color: darkgrey;
 }

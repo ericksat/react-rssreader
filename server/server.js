@@ -1,9 +1,7 @@
-// TODO: Post design, show dates properly using moment.js.
 // TODO: Switch the localStorage (?) Look into indexedDB and such, maybe they're mature and easier to work with?
 // TODO: Storage could also help us when remotely checking if there are new entries.
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.
-// TODO: Update design.
 
 // NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client.
 

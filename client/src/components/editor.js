@@ -62,12 +62,15 @@ export default class Editor extends React.Component {
 
         return (
             <div className={classes}>
-                <h1>Editor</h1>
-                <form onSubmit={this.onSubmit}>
+                <h1 className="editor__title">RSS Site Info</h1>
+                <form onSubmit={this.onSubmit} className="editor__form">
                     <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange} />
                     <input type="text" name="url" placeholder="URL" value={this.state.url} onChange={this.handleChange} />
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    <button type="button" className="btn btn-secondary" onClick={this.props.onCancel}>Cancel</button>
+                    <div>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="button" className="btn btn--secondary" onClick={this.props.onCancel}>Cancel</button>
+                    </div>
+
                 </form>
             </div>
         );

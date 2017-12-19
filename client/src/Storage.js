@@ -1,5 +1,3 @@
-import lodash from 'lodash';
-
 /** Store sites list and manipulate it client-side */
 export default class Storage {
     constructor(updateParentCallback) {
@@ -16,12 +14,38 @@ export default class Storage {
         this.storage.setItem('sites', JSON.stringify(this.sites));
     }
 
+    /**
+     * Compares two lists of sites
+     *
+     * @param {[Object]} listA
+     * @param {[Object]} listB
+     * @returns Boolean
+     */
+    siteCompare(listA, listB) {
+        function cmp(a, b) {
+            for (let field of Storage.siteFields) {
+                if (a[field] !== b[field]) return false;
+            }
+
+            return true;
+        }
+        // Quick compare
+        if (listA.length !== listB.length) return false;
+        // Compare by members
+        for (let i = 0; i < listA.length; i++) {
+            if (cmp(listA[i], listB[i]) === false) {
+                return false;
+            }
+        }
+        return true; // Couldn't find discrepancies
+    }
+
     /** Syncs with server */
     sync() {
         // Test express
+        // TODO: Handle errors
         fetch("/sites").then((res) => res.json()).then((res) => {
-            // TODO: Handle error
-            if (!lodash.isEqual(res.sites, this.sites)) {
+            if (this.siteCompare(res.sites, this.sites) === false) {
                 this.sites = res.sites;
                 this.store();
                 this.updateParentCallback(this.sites);
@@ -167,3 +191,5 @@ export default class Storage {
         })
     }
 }
+
+Storage.siteFields = ["title", "url", "_id"];

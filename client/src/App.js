@@ -44,7 +44,7 @@ class App extends Component {
 
     /** Used by storage to lead to a redraw */
     updateSites(sites) {
-        console.log("App:updateSites", sites);
+        // console.log("App:updateSites", sites);
         this.setState({ sites });
     }
 
@@ -97,7 +97,7 @@ class App extends Component {
             <Editor show={this.state.editorOpen} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
             <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} />
         </div>
-        <Footer content="RSS Reader&trade; &copy;2017 By Shmoofel Media" />
+        <Footer content="RSS Reader&trade; &copy;2017 By Shmoofel Media, Powered by React and Node.js" />
       </div>
     );
   }
