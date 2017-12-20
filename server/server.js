@@ -1,5 +1,12 @@
-// TODO: Switch the localStorage (?) Look into indexedDB and such, maybe they're mature and easier to work with?
-// TODO: Storage could also help us when remotely checking if there are new entries.
+// TODO: Ok, here is what I'm thinking: it became too fucking complicated. Merge the last checked data with the site list.
+// TODO: This means the site list should not allow double entries! URLs are unique, names are not. Enforce this.
+
+// TODO: Changing the site list (add/delete/edit) should trigger an update of the urls (remove if not exist anymore, add if new.)
+// TODO: Clicking on an item that's already selected does not trigger a refresh, but removes the counter. It should refresh.
+// TODO: When we're ready, increase the polling times to something more sensible.
+// TODO: Remove "minimum time didn't pass yet" console message
+// TODO: Not every click should store items. Only when something actually changed in the data.
+
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.
 
@@ -10,8 +17,10 @@ const axios = require('axios');
 // const fs = require("fs");
 const bodyParser = require('body-parser')
 const path = require('path');
+const Base64 = require('js-base64').Base64;
 
-const rssParser = require('./app/rssparser').default;
+const rssParser = require('./app/rssparser').request;
+const rssTest = require('./app/rssparser').newTest;
 const db = require('./app/db');
 // Models
 const siteModel = require('./app/site');
@@ -78,17 +87,30 @@ app.delete('/sites/:id', (req, res) => {
 
 // RSS ROUTES
 
-app.get("/rss/:id", async (req, res) => {
+app.get("/rss/:base64", async (req, res) => {
     try {
         // console.log("Looking for", req.params.id)
-        let found = await siteModel.findById(req.params.id);
+        // let found = await siteModel.findById(req.params.id);
         // console.log(found);
-        if (!found || !found.url) throw new Error("ID Not found!");
+        // if (!found || !found.url) throw new Error("ID Not found!");
         // console.log("fetching", found.url);
-        let channel = await rssParser(found.url);
+        let url = Base64.decode(req.params.base64);
+        let channel = await rssParser(url);
         res.send({ success: true, channel });
     } catch (e) {
-        res.send({ success: false, error: "ID not found" });
+        res.send({ success: false, error: e.message });
+    }
+});
+
+app.get("/rss-items/:base64", async(req, res) => {
+    try {
+        let url = Base64.decode(req.params.base64);
+        let lastRead = req.query.lastRead;
+        let info = await rssTest(url, lastRead);
+
+        res.send({success: true, url, lastRead, ...info})
+    } catch (e) {
+        res.send({success: false, error: e.message});
     }
 });
 

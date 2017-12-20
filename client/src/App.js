@@ -33,8 +33,10 @@ class App extends Component {
     }
 
     selectSite(id) {
+        // let site = this.state.sites.find((site) => site._id === id);
+        let site = this.storage.updateLastVisit(id);
         // console.log("Received final id", id)
-        this.setState({selectedSite: id, editorOpen: false, editorSite: null})
+        this.setState({selectedSite: site.url, editorOpen: false, editorSite: null})
     }
 
     deleteSite(id) {

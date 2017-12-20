@@ -33,10 +33,13 @@ const formatContent = async (xmlContent) => {
         finalItems.push({
             title: arrayOrStringOrNothing(item.title, "Untitled"),
             pubDate: new Date(item.pubDate),
+            tstamp: new Date(item.pubDate).getTime(),
             link: arrayOrStringOrNothing(item.link, "No link"),
             description: arrayOrStringOrNothing(item.description, "")
         });
     }
+    // Some stinking sites (like Fake News) mess with the items, so they're not in order. I will ENFORCE this to avoid changing the entire app.
+    finalItems.sort((a, b) => b.tstamp - a.tstamp);
 
     return {
         title: arrayOrStringOrNothing(channel.title, "Untitled"),
@@ -48,6 +51,7 @@ const formatContent = async (xmlContent) => {
     };
 };
 
+// Returns the full request
 const request = async (url) => {
     try {
         let response = await axios.get(url, {ttl: 300});
@@ -59,9 +63,21 @@ const request = async (url) => {
     }
 }
 
-module.exports = {
-    default: request,
+// Tests for new items
+const newTest = async(url, lastRead) => {
+    let response = await request(url);
+    let filteredItems = response.items.filter((item) => {
+        return item.tstamp > lastRead
+    });
+
+    return {
+        latest: filteredItems.length > 0 ? filteredItems[0] : null,
+        newItems: filteredItems,
+        count: filteredItems.length
+    }
 }
+
+module.exports = { request, newTest }
 
 /*
 module.exports.checkAllForNew = async () => {

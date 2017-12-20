@@ -1,4 +1,5 @@
 import React from 'react';
+import {Base64} from 'js-base64';
 
 import RssItem from './rss-item';
 import Loader from './loader';
@@ -33,7 +34,7 @@ export default class MainContent extends React.Component {
         if (!props.selected) return;
         // Fetch
         this.setState({ data: null, loading: true, error: null });
-        let url = "/rss/" + props.selected;
+        let url = "/rss/" + Base64.encode(props.selected);
         // console.log("Will fetch", url);
         fetch(url).then((res) => res.json()).then((json) => {
             if (json.error) {

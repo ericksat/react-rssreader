@@ -1,3 +1,11 @@
+import LastRead from './LastRead';
+
+/** Used by fetch requests */
+global.jsonHeaders = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+};
+
 /** Store sites list and manipulate it client-side */
 export default class Storage {
     constructor(updateParentCallback) {
@@ -5,13 +13,12 @@ export default class Storage {
         // A callback to notify parent it needs to redraw
         this.updateParentCallback = updateParentCallback;
         this.sites = [];
-        // Do we need periodical sync? I think only on page load
-        // this.timer = setInterval(this.sync.bind(this), 15000); // Compare sites every now and then
+        this.lastRead = new LastRead(this.storage, this.lastReadUpdate.bind(this));
     }
 
     /** Part of sync process */
     store() {
-        this.storage.setItem('sites', JSON.stringify(this.sites));
+        this.storage.setItem(Storage.key, JSON.stringify(this.sites));
     }
 
     /**
@@ -44,7 +51,7 @@ export default class Storage {
     sync() {
         // Test express
         // TODO: Handle errors
-        fetch("/sites").then((res) => res.json()).then((res) => {
+        return fetch(Storage.key).then((res) => res.json()).then((res) => {
             if (this.siteCompare(res.sites, this.sites) === false) {
                 this.sites = res.sites;
                 this.store();
@@ -55,13 +62,15 @@ export default class Storage {
 
     /** Loads all sites from local, or contacts remote server */
     load() {
-        let sites = this.storage.getItem("sites");
+        let sites = this.storage.getItem(Storage.key);
         if (typeof (sites) === "string") {
             this.sites = JSON.parse(sites);
             this.updateParentCallback(this.sites);
         }
         // On either case, ask for fresh data from server
-        this.sync();
+        this.sync().then(() => {
+            this.lastRead.load(this.sites);
+        });
     }
 
     /**
@@ -92,10 +101,7 @@ export default class Storage {
         // Now update the server
         console.log("Updating server");
         let opts = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+            headers: global.jsonHeaders,
             method: siteId ? "PUT" : "POST",
             body: JSON.stringify({ site })
         };
@@ -173,10 +179,7 @@ export default class Storage {
         // Now update the server
         console.log("Updating server");
         let opts = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+            headers: global.jsonHeaders,
             method: "DELETE"
         };
 
@@ -184,12 +187,42 @@ export default class Storage {
             if (!json.success) {
                 throw new Error(json.error);
             }
-            console.log("Updated server");
+            console.log("Storage:remove updated server");
+            this.lastRead.compareAndRefresh(this.sites);
         }).catch((err) => {
             console.log(err);
             this.rollback(lastSites);
         })
     }
+
+    updateLastVisit(siteId) {
+        let site = this.sites.find((site) => site._id === siteId);
+        if (!site) throw new Error("Site not fount " + siteId);
+        // Update the count of all sites that have this url (can be more than one, yeah)
+        this.sites.map(item => {
+            if (item.url === site.url) item.newCount = 0;
+            return item;
+        });
+        this.lastRead.touch(site.url);
+        this.updateParentCallback(this.sites);
+        this.store();
+        return site;
+    }
+
+    /**
+     * A notification from child to parent, to tell it to update
+     */
+    lastReadUpdate(url, count) {
+        this.sites.map((site) => {
+            if (site.url === url) {
+                site.newCount = count;
+            }
+            return site;
+        });
+        this.updateParentCallback(this.sites);
+        this.store();
+    }
 }
 
 Storage.siteFields = ["title", "url", "_id"];
+Storage.key = 'sites';
