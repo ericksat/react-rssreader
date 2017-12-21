@@ -82,6 +82,13 @@ export default class Storage {
         this.updateParentCallback(this.sites);
     }
 
+    verifyUrlNotExists(url, ownId) {
+        console.info(`verifying ${url} and ${ownId}`)
+        let found = this.sites.find(site => site.url === url && site._id !== ownId);
+        if (found) return false;
+        return true;
+    }
+
     /**
      * Updates/creates a single site
      *
@@ -89,6 +96,10 @@ export default class Storage {
      * @param {Object} site with title and url
      */
     save(siteId, site) {
+        // Verify that url does not exist
+        if (!this.verifyUrlNotExists(site.url, siteId)) {
+            throw new Error("Sorry, this url exists already. Try another.");
+        }
         // Update local first
         console.log("Updating local copy");
         let lastSites = Object.assign(this.sites); // Keep copy in case of server error

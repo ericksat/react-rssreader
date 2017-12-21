@@ -109,8 +109,10 @@ export default class LastRead {
         if (!entry) throw new Error("Could not locate url " + url);
         entry.lastReadItem = entry.lastReceivedItem; // So next syncs will test from after the latest received item
         entry.lastCheck = Date.now();
-        entry.lastCount = 0;
-        this.store();
+        if (entry.lastCount !== 0) {
+            entry.lastCount = 0;
+            this.store();
+        }
     }
 
     /**

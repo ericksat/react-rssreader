@@ -216,11 +216,11 @@ footer {
 
 .editor__title {
     font-size: 2.5rem;
-    margin: 2rem 1rem 0;
+    margin: 2rem 1rem 1rem;
 }
 
 .editor__form {
-    padding: 1rem;
+    padding: 0 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -245,4 +245,9 @@ footer {
 
 .btn--secondary {
     background-color: darkgrey;
+}
+
+.error {
+    color: #e33;
+    margin-bottom: 1rem;
 }

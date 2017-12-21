@@ -63,6 +63,7 @@ export default class Editor extends React.Component {
         return (
             <div className={classes}>
                 <h1 className="editor__title">RSS Site Info</h1>
+                { this.props.error && <div className='error'>{this.props.error}</div> }
                 <form onSubmit={this.onSubmit} className="editor__form">
                     <input type="text" name="title" placeholder="Title" value={this.state.title} onChange={this.handleChange} />
                     <input type="text" name="url" placeholder="URL" value={this.state.url} onChange={this.handleChange} />

@@ -22,10 +22,10 @@ export default class MainContent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.selected === this.props.selected) {
-            // console.log("Nextprops equals current content props.");
-            return;
-        }
+        // if (nextProps.selected === this.props.selected) {
+        //     console.log("Nextprops equals current content props.");
+        //     return;
+        // }
         // console.log("Updating main content", nextProps.selected, this.props.selected);
         this.fetchRss(nextProps);
     }

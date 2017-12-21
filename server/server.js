@@ -1,11 +1,11 @@
 // TODO: Ok, here is what I'm thinking: it became too fucking complicated. Merge the last checked data with the site list.
 // TODO: This means the site list should not allow double entries! URLs are unique, names are not. Enforce this.
+// TODO: There is an issue where you might click on a site before it was ever queried. In this case, we don't have the timestamp of the most recent item.
+// --> I think we should udpate the timestamp not on the click, but actually on the response. Capish?
 
 // TODO: Changing the site list (add/delete/edit) should trigger an update of the urls (remove if not exist anymore, add if new.)
-// TODO: Clicking on an item that's already selected does not trigger a refresh, but removes the counter. It should refresh.
 // TODO: When we're ready, increase the polling times to something more sensible.
 // TODO: Remove "minimum time didn't pass yet" console message
-// TODO: Not every click should store items. Only when something actually changed in the data.
 
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 // TODO: Store last check date and show if there are new posts.

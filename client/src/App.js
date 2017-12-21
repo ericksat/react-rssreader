@@ -18,7 +18,8 @@ class App extends Component {
             sites: [],
             selectedSite: null,
             editorOpen: false,
-            editorSite: null
+            editorSite: null,
+            error: ""
         }
 
         this.storage = new Storage(this.updateSites.bind(this));
@@ -68,7 +69,8 @@ class App extends Component {
         this.setState({
             editorOpen: true,
             editorSite: site,
-            selectedSite: null
+            selectedSite: null,
+            error: ""
         })
     }
 
@@ -86,8 +88,13 @@ class App extends Component {
     /** Updates or inserts site */
     saveSite(id, site) {
         console.log(`App:SaveSite ID ${id}`);
-        this.closeEditor();
-        this.storage.save(id, site);
+        try {
+            this.setState({error: ""})
+            this.storage.save(id, site);
+            this.closeEditor();
+        } catch (e) {
+            this.setState({error: e.message});
+        }
     }
 
   render() {
@@ -96,7 +103,7 @@ class App extends Component {
         <Header title="Welcome to RSS Reader&trade;" />
         <div className="content content--main">
             <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
-            <Editor show={this.state.editorOpen} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
+            <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
             <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} />
         </div>
         <Footer content="RSS Reader&trade; &copy;2017 By Shmoofel Media, Powered by React and Node.js" />
