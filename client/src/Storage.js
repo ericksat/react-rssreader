@@ -13,7 +13,7 @@ export default class Storage {
         // A callback to notify parent it needs to redraw
         this.updateParentCallback = updateParentCallback;
         this.sites = [];
-        this.lastRead = new LastRead(this.storage, this.lastReadUpdate.bind(this));
+        this.lastRead = null; // Will be filled on load
     }
 
     /** Part of sync process */
@@ -47,31 +47,38 @@ export default class Storage {
         return true; // Couldn't find discrepancies
     }
 
-    /** Syncs with server */
-    sync() {
-        // Test express
-        // TODO: Handle errors
-        return fetch(Storage.key).then((res) => res.json()).then((res) => {
-            if (this.siteCompare(res.sites, this.sites) === false) {
-                this.sites = res.sites;
-                this.store();
-                this.updateParentCallback(this.sites);
-            }
-        })
-    }
 
     /** Loads all sites from local, or contacts remote server */
     load() {
         let sites = this.storage.getItem(Storage.key);
         if (typeof (sites) === "string") {
             this.sites = JSON.parse(sites);
+            console.log("Parsed sites from local data, updating parent.");
             this.updateParentCallback(this.sites);
         }
         // On either case, ask for fresh data from server
-        this.sync().then(() => {
-            this.lastRead.load(this.sites);
-        });
+        this.loadFromServer();
     }
+
+    /** Gets response from server, and fills/overwrites local if not the same. Separate function to make it easier to test */
+    loadFromServer() {
+        // Test express
+        return fetch(Storage.key).then((res) => res.json()).then((res) => {
+            if (this.siteCompare(res.sites, this.sites) === false) {
+                console.log("Updating sites from server.");
+                this.sites = res.sites;
+                this.store();
+                this.updateParentCallback(this.sites);
+            } else {
+                console.log("Server data matches local. Not touching.");
+            }
+            // Either way initialize the LastRead manager object.
+            this.lastRead = new LastRead(this.sites, this.lastReadUpdate.bind(this));
+        }).catch((err) => {
+            throw new Error(err.message);
+        })
+    }
+
 
     /**
      * In case of remote error
@@ -206,32 +213,25 @@ export default class Storage {
         })
     }
 
-    updateLastVisit(siteId) {
-        let site = this.sites.find((site) => site._id === siteId);
-        if (!site) throw new Error("Site not fount " + siteId);
-        // Update the count of all sites that have this url (can be more than one, yeah)
-        this.sites.map(item => {
-            if (item.url === site.url) item.newCount = 0;
-            return item;
-        });
-        this.lastRead.touch(site.url);
-        this.updateParentCallback(this.sites);
-        this.store();
-        return site;
+    updateLastRead(url, data) {
+        // Find entry
+        let entry = this.sites.find((item) => item.url === url);
+        if (!entry) throw new Error(`Could not locate url ${url}`);
+        // Fetch most recent item's timestamp
+        let latestTstamp = data.items[0].tstamp;
+
+        if (entry.lastRead.touch(latestTstamp) === true) { // Count was updated, and so we need a refresh
+            this.updateParentCallback(this.sites);
+        }
+        return entry;
     }
 
     /**
-     * A notification from child to parent, to tell it to update
+     * A notification from child to parent to notify of data change that requires storing and UI refresh
      */
-    lastReadUpdate(url, count) {
-        this.sites.map((site) => {
-            if (site.url === url) {
-                site.newCount = count;
-            }
-            return site;
-        });
-        this.updateParentCallback(this.sites);
-        this.store();
+    lastReadUpdate() {
+        this.store(); // Store in session/local-storage.
+        this.updateParentCallback(this.sites); // Update the UI
     }
 }
 

@@ -1,16 +1,13 @@
-// TODO: Ok, here is what I'm thinking: it became too fucking complicated. Merge the last checked data with the site list.
-// TODO: This means the site list should not allow double entries! URLs are unique, names are not. Enforce this.
-// TODO: There is an issue where you might click on a site before it was ever queried. In this case, we don't have the timestamp of the most recent item.
-// --> I think we should udpate the timestamp not on the click, but actually on the response. Capish?
+// TODO: I think updateLastVisit should return to lastRead, and return true or false to its parent (storage)
+// TODO: Find out why App:updateSites is called on page load.
 
-// TODO: Changing the site list (add/delete/edit) should trigger an update of the urls (remove if not exist anymore, add if new.)
+// TODO: Don't clear sessionStorage on each app mount when we're good to go.
 // TODO: When we're ready, increase the polling times to something more sensible.
 // TODO: Remove "minimum time didn't pass yet" console message
 
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
-// TODO: Store last check date and show if there are new posts.
 
-// NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client.
+// ### NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client. ###
 
 const express = require("express");
 const axios = require('axios');

@@ -45,6 +45,8 @@ export default class MainContent extends React.Component {
                 loading: false,
                 data: json.channel
             });
+
+            this.props.onRssFetched(props.selected, this.state.data);
         }).catch((e) => {
             this.setState({
                 error: e.message,

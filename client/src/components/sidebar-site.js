@@ -2,7 +2,7 @@ import React from 'react';
 
 const SideBarSite = (props) => {
     let classy = props.active ? "sitelist__item sitelist__item--active" : "sitelist__item";
-    let count  = props.site.newCount ? ` (${props.site.newCount})` : "";
+    let count = props.site.lastRead && props.site.lastRead.newItemCount > 0 ? ` (${props.site.lastRead.newItemCount})` : "";
 
     return (
         <div className={classy}>

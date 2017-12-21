@@ -26,6 +26,9 @@ const parseImage = (input, defaultValue = "") => {
 const formatContent = async (xmlContent) => {
     // console.log(xmlContent);
     let full = await xmlParse(xmlContent, formatOpts);
+    if (!full.rss) {
+        throw new Error("Failed to parse xml!");
+    }
     let channel = full.rss.channel;
     let finalItems = [];
 
@@ -54,12 +57,13 @@ const formatContent = async (xmlContent) => {
 // Returns the full request
 const request = async (url) => {
     try {
+        console.log("Heading to url " + url);
         let response = await axios.get(url, {ttl: 300});
         let formattedContent = await formatContent(response.data);
         return formattedContent;
     } catch (e) {
         console.log(e)
-        throw e;
+        throw new Error(`Could not parse response from ${url}, possibly not available right now.`);
     }
 }
 
