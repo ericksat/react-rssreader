@@ -55,6 +55,7 @@ export default class SideBar extends React.Component {
     }
 
     render() {
+        console.log("Sidebar re-render");
         return (
             <div className="sidebar">
                 <SideBarHeader add={this.onAddSite.bind(this)} />

@@ -1,10 +1,10 @@
-// TODO: I think updateLastVisit should return to lastRead, and return true or false to its parent (storage)
-// TODO: Find out why App:updateSites is called on page load.
-
+// TODO: Jesus christ remove most of those console.logs
 // TODO: Don't clear sessionStorage on each app mount when we're good to go.
 // TODO: When we're ready, increase the polling times to something more sensible.
 // TODO: Remove "minimum time didn't pass yet" console message
 
+
+// TODO: Test cases for easier future refactoring
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
 
 // ### NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client. ###

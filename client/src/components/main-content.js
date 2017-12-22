@@ -22,10 +22,10 @@ export default class MainContent extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (nextProps.selected === this.props.selected) {
-        //     console.log("Nextprops equals current content props.");
-        //     return;
-        // }
+        if (nextProps.selected === this.props.selected && !nextProps.forceRefresh) {
+            console.log("Nextprops equals current content props.");
+            return;
+        }
         // console.log("Updating main content", nextProps.selected, this.props.selected);
         this.fetchRss(nextProps);
     }
@@ -64,6 +64,7 @@ export default class MainContent extends React.Component {
     }
 
     render() {
+        console.log("Main re-render");
         let classes = this.props.show ? ["main-panel"] : ["main-panel hidden"];
         let rssMain = this.state.data ? (
         <div className="main-rss">

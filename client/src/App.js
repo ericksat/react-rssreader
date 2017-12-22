@@ -19,6 +19,7 @@ class App extends Component {
             selectedSite: null,
             editorOpen: false,
             editorSite: null,
+            forceRefresh: false,
             error: ""
         }
 
@@ -36,9 +37,12 @@ class App extends Component {
 
     selectSite(id) {
         let site = this.state.sites.find((site) => site._id === id);
-        // let site = this.storage.updateLastVisit(id);
+        let leNew = { selectedSite: site.url, editorOpen: false, editorSite: null, forceRefresh: false };
+        if (this.state.selectedSite === site.url && !this.state.editorOpen) { // Ask our main content nicely to refresh
+            leNew.forceRefresh = true;
+        }
         // console.log("Received final id", id)
-        this.setState({ selectedSite: site.url, editorOpen: false, editorSite: null })
+        this.setState(leNew)
     }
 
     deleteSite(id) {
@@ -49,7 +53,7 @@ class App extends Component {
     /** Used by storage to lead to a redraw */
     storageUpdatedSites(sites) {
         console.log("App:updateSites called");
-        this.setState({ sites });
+        this.setState({ sites, forceRefresh: false });
     }
 
     fetchSites() {
@@ -77,10 +81,10 @@ class App extends Component {
 
     componentDidMount() {
         console.log("Mounting app");
-        // this.fetchSites();
         window.sessionStorage.clear(); // Give us a fresh start while we're testing.
         this.storage.load();
         global.storage = this.storage; // For debugging
+        window.app = this;
     }
 
     closeEditor() {
@@ -108,13 +112,14 @@ class App extends Component {
     }
 
     render() {
+        console.log("App re-render");
         return (
             <div className="App">
                 <Header title="Welcome to RSS Reader&trade;" />
                 <div className="content content--main">
                     <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                     <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
-                    <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} />
+                    <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 </div>
                 <Footer content="RSS Reader&trade; &copy;2017 By Shmoofel Media, Powered by React and Node.js" />
             </div>

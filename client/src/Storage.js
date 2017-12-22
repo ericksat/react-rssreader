@@ -1,4 +1,4 @@
-import LastRead from './LastRead';
+import LastReadManager, { LastReadInfo } from './LastReadManager';
 
 /** Used by fetch requests */
 global.jsonHeaders = {
@@ -13,7 +13,7 @@ export default class Storage {
         // A callback to notify parent it needs to redraw
         this.updateParentCallback = updateParentCallback;
         this.sites = [];
-        this.lastRead = null; // Will be filled on load
+        this.lastReadManager = null; // Will be filled on load
     }
 
     /** Part of sync process */
@@ -73,7 +73,7 @@ export default class Storage {
                 console.log("Server data matches local. Not touching.");
             }
             // Either way initialize the LastRead manager object.
-            this.lastRead = new LastRead(this.sites, this.lastReadUpdate.bind(this));
+            this.lastReadManager = new LastReadManager(this.sites, this.lastReadUpdate.bind(this));
         }).catch((err) => {
             throw new Error(err.message);
         })
@@ -147,10 +147,16 @@ export default class Storage {
      */
     update(id, site) {
         let pos = this.sites.findIndex((site) => site._id === id);
-        this.sites[pos] = {
-            _id: id,
-            ...site
-        };
+        let old = this.sites[pos];
+        // If url was changed, we need to create a new lastRead object
+        if (site.url !== old.url) {
+            old.lastRead = new LastReadInfo();
+        }
+        // Update
+        old._id = id;
+        old.title = site.title;
+        old.url = site.url;
+        // Store and notify UI
         this.store();
         this.updateParentCallback(this.sites);
     }
@@ -164,7 +170,8 @@ export default class Storage {
         let _id = "tempId_" + Date.now();
         this.sites.push({
             _id,
-            ...site
+            ...site,
+            lastRead: new LastReadInfo(),
         });
         this.store();
         this.updateParentCallback(this.sites);
@@ -206,7 +213,6 @@ export default class Storage {
                 throw new Error(json.error);
             }
             console.log("Storage:remove updated server");
-            this.lastRead.compareAndRefresh(this.sites);
         }).catch((err) => {
             console.log(err);
             this.rollback(lastSites);
@@ -214,16 +220,10 @@ export default class Storage {
     }
 
     updateLastRead(url, data) {
-        // Find entry
-        let entry = this.sites.find((item) => item.url === url);
-        if (!entry) throw new Error(`Could not locate url ${url}`);
-        // Fetch most recent item's timestamp
-        let latestTstamp = data.items[0].tstamp;
-
-        if (entry.lastRead.touch(latestTstamp) === true) { // Count was updated, and so we need a refresh
+        if (this.lastReadManager.updateLastRead(url, data) === true) { // Count was updated, and so we need a refresh
+            this.store();
             this.updateParentCallback(this.sites);
         }
-        return entry;
     }
 
     /**
