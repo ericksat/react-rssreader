@@ -81,7 +81,7 @@ class App extends Component {
 
     componentDidMount() {
         console.log("Mounting app");
-        window.sessionStorage.clear(); // Give us a fresh start while we're testing.
+        // window.sessionStorage.clear(); // Give us a fresh start while we're testing.
         this.storage.load();
         global.storage = this.storage; // For debugging
         window.app = this;
@@ -93,7 +93,7 @@ class App extends Component {
 
     /** Updates or inserts site */
     saveSite(id, site) {
-        console.log(`App:SaveSite ID ${id}`);
+        // console.log(`App:SaveSite ID ${id}`);
         try {
             this.setState({ error: "" })
             this.storage.save(id, site);
@@ -112,7 +112,6 @@ class App extends Component {
     }
 
     render() {
-        console.log("App re-render");
         return (
             <div className="App">
                 <Header title="Welcome to RSS Reader&trade;" />

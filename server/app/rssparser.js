@@ -57,7 +57,7 @@ const formatContent = async (xmlContent) => {
 // Returns the full request
 const request = async (url) => {
     try {
-        console.log("Heading to url " + url);
+        // console.log("Heading to url " + url);
         let response = await axios.get(url, {ttl: 300});
         let formattedContent = await formatContent(response.data);
         return formattedContent;

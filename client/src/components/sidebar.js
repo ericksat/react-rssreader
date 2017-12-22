@@ -37,7 +37,6 @@ export default class SideBar extends React.Component {
     }
 
     selectSite(id) {
-        // console.log("Selected url", url);
         this.props.selectSite(id);
         this.setState({selected: id});
     }
@@ -55,7 +54,6 @@ export default class SideBar extends React.Component {
     }
 
     render() {
-        console.log("Sidebar re-render");
         return (
             <div className="sidebar">
                 <SideBarHeader add={this.onAddSite.bind(this)} />

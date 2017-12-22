@@ -9,7 +9,7 @@ global.jsonHeaders = {
 /** Store sites list and manipulate it client-side */
 export default class Storage {
     constructor(updateParentCallback) {
-        this.storage = window.sessionStorage; // Will update to localStorage when it's ready
+        this.storage = window.localStorage;
         // A callback to notify parent it needs to redraw
         this.updateParentCallback = updateParentCallback;
         this.sites = [];
@@ -108,7 +108,7 @@ export default class Storage {
             throw new Error("Sorry, this url exists already. Try another.");
         }
         // Update local first
-        console.log("Updating local copy");
+        // console.log("Updating local copy");
         let lastSites = Object.assign(this.sites); // Keep copy in case of server error
         let tempId;
         if (siteId) {
@@ -117,7 +117,7 @@ export default class Storage {
             tempId = this.create(site);
         }
         // Now update the server
-        console.log("Updating server");
+        // console.log("Updating server");
         let opts = {
             headers: global.jsonHeaders,
             method: siteId ? "PUT" : "POST",
@@ -129,7 +129,7 @@ export default class Storage {
             if (!json.success) {
                 throw new Error(json.error);
             }
-            console.log(`Updated server, json.id ${json.id} tempId ${tempId}`);
+            // console.log(`Updated server, json.id ${json.id} tempId ${tempId}`);
             if (json.id && tempId) {
                 this.updateTempId(tempId, json.id);
             }
@@ -184,13 +184,12 @@ export default class Storage {
      * @param {String} remoteId
      */
     updateTempId(tempId, remoteId) {
-        console.log("Calling update temp Id");
         let pos = this.sites.findIndex((site) => site._id === tempId);
-        console.log("Found pos " + pos);
         if (pos) {
             this.sites[pos]._id = remoteId;
             this.store();
             this.updateParentCallback(this.sites);
+            console.log(`Updated tempID ${tempId} to ${remoteId}`);
         }
     }
 
@@ -199,10 +198,10 @@ export default class Storage {
         let pos = this.sites.findIndex((site) => site._id === siteId);
         this.sites.splice(pos, 1);
         this.store();
-        console.log("Updating parent");
+        // console.log("Updating parent");
         this.updateParentCallback(this.sites);
         // Now update the server
-        console.log("Updating server");
+        // console.log("Updating server");
         let opts = {
             headers: global.jsonHeaders,
             method: "DELETE"

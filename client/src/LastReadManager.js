@@ -42,7 +42,7 @@ export class LastReadInfo {
         if (count > 0 && latestItem.tstamp > this.readTstamp) {
             // console.log(`Response for last item ${candidate.url} has count ${json.count}`);
             if (count !== this.unreadItems) { // Trigger re-render if count has changed
-                console.log(`${count} !== ${this.unreadItems}`);
+                // console.log(`${count} !== ${this.unreadItems}`);
                 this.unreadItems = count;
                 return true; // ui needs to be redrawn
             }
@@ -58,8 +58,8 @@ export class LastReadInfo {
 export default class LastReadManager {
     constructor(sites, updateParentCallback) {
         this.key = "lastItemsRead";
-        this.minCheckTime = 60000; // A minute for now, will increase later
-        this.syncInterval = 4000;
+        this.minCheckTime = 120000; // A pause between new item pollings
+        this.syncInterval = 2000; // When we start polling, check each site separately, with a small interval (counted AFTER response is received)
 
         this.sites = sites;
         this.sites.forEach(element => { // Initialize each lastReadInfo structure
@@ -102,9 +102,8 @@ export default class LastReadManager {
         let candidate = this.selectNextSite();
         let recentCheck = candidate.lastRead.recentCheck;
         // A bit of throttling
-        console.log(`now ${Date.now()} - recent ${recentCheck} = ${Date.now() - recentCheck} and this minCheckTime is ${this.minCheckTime}`);
         if ( Date.now() - recentCheck  < this.minCheckTime) {
-            console.log("Minimum time didn't pass yet, waiting...");
+            // console.log("Minimum time didn't pass yet, waiting...");
             // Queue the next sync test and return
             setTimeout(this.sync, this.syncInterval);
             return;

@@ -1,8 +1,4 @@
-// TODO: Jesus christ remove most of those console.logs
-// TODO: Don't clear sessionStorage on each app mount when we're good to go.
 // TODO: When we're ready, increase the polling times to something more sensible.
-// TODO: Remove "minimum time didn't pass yet" console message
-
 
 // TODO: Test cases for easier future refactoring
 // TODO: Code refactoring - component children-parent structure, based on what React promotes. Don't do unmount-remount (use hide/show), but avoid DOM otherwise.
@@ -51,13 +47,12 @@ app.get("/sites", (req, res) => {
 
 app.post('/sites', (req, res) => {
     let site = req.body.site;
-    console.log(req.body);
-    // console.log(req);
+    // console.log(req.body);
     if (!site) {
         res.send({success: false, error: "No site data received"});
         return;
     }
-    console.log("Posting site", site);
+    console.log("POST/sites", site);
     let model = new siteModel(site);
     model.save().then(() => {
         console.log("Added new model");
