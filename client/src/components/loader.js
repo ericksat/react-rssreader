@@ -9,6 +9,6 @@ export default (props) => {
     }
 
     return (
-        <img src={logo} className="App-logo" alt="logo" style={style} />
+        <img src={logo} className="App__logo" alt="logo" style={style} />
     );
 }

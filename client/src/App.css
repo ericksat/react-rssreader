@@ -3,14 +3,14 @@
   background-color: #eeeeee;
 }
 
-.App-logo {
+.App__logo {
     animation: App-logo-spin infinite 20s linear;
     position: relative;
     top: 5px;
 }
 
-.App-header {
-  background-color: #222;
+.App__header {
+  background-color: darkred;
   height: 8rem;
   padding: 2rem;
   color: white;
@@ -23,12 +23,8 @@
     height: calc(100vh - 13rem);
 }
 
-.App-title {
+.App__title {
   font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
 }
 
 @keyframes App-logo-spin {
@@ -56,6 +52,7 @@ footer {
     background-color: white;
     min-width: 25rem;
     width: 25rem;
+    overflow: auto;
 }
 
 @media (min-width: 900px) {
@@ -96,6 +93,8 @@ footer {
     color: black;
     display: flex;
     flex-direction: row;
+    text-overflow: ellipsis;
+    align-items: center;
 }
 
 .sitelist__item--active {
@@ -114,14 +113,16 @@ footer {
 
 .sitelist__item__edit {
     margin-right: 0.25rem;
-    padding: 0px 1rem 0.5rem 0.75rem !important;
+    padding: 0px 1.05rem 0.5rem 0.8rem !important;
     font-size: 1.75rem;
+    height: 4rem;
 }
 
 .sitelist__item__delete {
     background-color: red !important;
     padding: 0.5rem 1.1rem !important;
     font-size: 1.75rem;
+    height: 4rem;
 }
 
 .sitelist__item__delete:hover {

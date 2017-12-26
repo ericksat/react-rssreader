@@ -114,7 +114,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Header title="Welcome to RSS Reader&trade;" />
+                <Header title="Shmoofel's RSS Reader&trade;" />
                 <div className="content content--main">
                     <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                     <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
