@@ -6,7 +6,7 @@
 // ### NOTE: Deployment to Heroku is done through the package.json scripts. Look in there, but basically it runs npm install + npm build from the client. ###
 
 const express = require("express");
-const axios = require('axios');
+const axios = require('cachios');
 // const fs = require("fs");
 const bodyParser = require('body-parser')
 const path = require('path');
@@ -14,7 +14,7 @@ const Base64 = require('js-base64').Base64;
 
 const rssParser = require('./app/rssparser').request;
 const rssTest = require('./app/rssparser').newTest;
-const db = require('./app/db');
+const db = require('./app/db'); // This is important to initialize MongoDB - don't delete or comment out!
 // Models
 const siteModel = require('./app/site');
 
