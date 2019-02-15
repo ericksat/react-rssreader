@@ -24,9 +24,14 @@ export default class SideBar extends React.Component {
 
     onSiteListClick(e) {
         e.stopPropagation();
+        let tgt = e.target;
+        // If clicked on image, we'll go up one step
+        if (e.target.tagName === "I") {
+            tgt = e.target.parentNode;
+        }
         // See if it's a select event, or a delete one (or edit in the future)
-        let type = e.target.getAttribute('data-role');
-        let id = e.target.getAttribute('data-id');
+        let type = tgt.getAttribute('data-role');
+        let id = tgt.getAttribute('data-id');
         if (type === "select") {
             this.selectSite(id);
         } else if (type === "delete") {
