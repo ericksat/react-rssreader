@@ -123,7 +123,8 @@ class App extends Component {
         return (
             <div className="App">
                 <Header title="Shmoofel's RSS Reader&trade;" onMenu={this.toggleSidebar.bind(this)} />
-                <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
+                <SideBar sites={this.state.sites} show={this.state.sideBarOn}
+                selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                 <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
                 <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />

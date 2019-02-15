@@ -54,8 +54,9 @@ export default class SideBar extends React.Component {
     }
 
     render() {
+        let classes = this.props.show ? ["sidebar"] : ["sidebar hidden"];
         return (
-            <div className="sidebar">
+            <div className={classes}>
                 <div className="sidebar_small" hidden>
                     This is the small sidebar
                 </div>
