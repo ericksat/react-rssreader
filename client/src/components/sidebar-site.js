@@ -7,8 +7,12 @@ const SideBarSite = (props) => {
     return (
         <div className={classy}>
             <span className="sitelist__item__title" data-role="select" data-id={props.site._id}>{props.site.title}{count}</span>
-            <button className="btn sitelist__item__edit" title="Edit" data-role="edit" data-id={props.site._id}>&#x1f6e0;</button>
-            <button className="btn sitelist__item__delete" title="Delete" data-role="delete" data-id={props.site._id}>&#x2716;</button>
+            <button className="btn sitelist__item__edit" title="Edit" data-role="edit" data-id={props.site._id}>
+                <i className="far fa-edit"></i>
+            </button>
+            <button className="btn sitelist__item__delete" title="Delete" data-role="delete" data-id={props.site._id}>
+                <i className="far fa-trash-alt"></i>
+            </button>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default class Editor extends React.Component {
     constructor(props) {
@@ -8,7 +8,7 @@ export default class Editor extends React.Component {
             id: "",
             title: "",
             url: ""
-        }
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -38,7 +38,7 @@ export default class Editor extends React.Component {
                 title: "",
                 id: "",
                 url: ""
-            })
+            });
         }
     }
 
@@ -47,7 +47,7 @@ export default class Editor extends React.Component {
         let site = {
             title: this.state.title.trim(),
             url: this.state.url.trim(),
-        }
+        };
         if (site.title.length > 0 && site.url.length > 0) {
             this.props.saveSite(this.state.id, site);
         }

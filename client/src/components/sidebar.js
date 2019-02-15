@@ -56,9 +56,14 @@ export default class SideBar extends React.Component {
     render() {
         return (
             <div className="sidebar">
-                <SideBarHeader add={this.onAddSite.bind(this)} />
-                <div className="sidebar__sitelist" onClick={this.onSiteListClick.bind(this)}>
-                    {this.renderSiteList()}
+                <div className="sidebar_small" hidden>
+                    This is the small sidebar
+                </div>
+                <div>
+                    <SideBarHeader add={this.onAddSite.bind(this)} />
+                    <div className="sidebar__sitelist" onClick={this.onSiteListClick.bind(this)}>
+                        {this.renderSiteList()}
+                    </div>
                 </div>
             </div>
         );

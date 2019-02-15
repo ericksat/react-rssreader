@@ -1,0 +1,114 @@
+.App {
+    text-align: center;
+    background-color: #eeeeee;
+    box-sizing: border-box;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        'header header header header'
+        'side main main main'
+        'footer footer footer footer';
+}
+
+.App__logo {
+    animation: App-logo-spin infinite 20s linear;
+    position: relative;
+    top: 5px;
+}
+
+.App__header {
+  background-color: darkred;
+  padding: 2rem;
+  color: white;
+  grid-area: header;
+  display: flex;
+}
+
+.App__title {
+  font-size: 1.5em;
+  flex-grow: 1;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+footer {
+    text-align: center;
+    padding: 1.25rem;
+    background-color: #383838;
+    grid-area: footer;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: white;
+}
+
+.btn {
+    background-color: lightcoral;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 0.5rem;
+    transition: 0.35s;
+}
+
+.btn:hover {
+    background-color: coral;
+}
+
+.editor {
+    grid-area: main;
+}
+
+.editor__title {
+    font-size: 2.5rem;
+    margin: 2rem 1rem 1rem;
+}
+
+.editor__form {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.editor__form input {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.editor__form div {
+    margin-top: 1rem;
+}
+
+.editor__form button {
+    font-size: 2rem;
+    margin: 0 0.5rem;
+}
+
+.btn--secondary {
+    background-color: darkgrey;
+}
+
+.error {
+    color: #e33;
+    margin-bottom: 1rem;
+}
+
+.settings-btn {
+    background-color: rgba(255,255,255,0.25);
+    color: #ffafaf;
+    font-size: 1.25rem;
+}
+
+.settings-btn:hover {
+    background-color: rgba(255,255,255,0.4);
+    color: white;
+}

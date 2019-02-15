@@ -5,13 +5,13 @@
 }
 
 html {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 16px;
   background-color: #ddd;
+  font-size: 1rem;
 }
 
 .hidden {

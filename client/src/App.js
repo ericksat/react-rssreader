@@ -8,7 +8,9 @@ import SideBar from './components/sidebar';
 import MainContent from './components/main-content';
 import Editor from './components/editor';
 // CSS
-import './App.css';
+import './css/App.css';
+import './css/Bar.css';
+import './css/MainPanel.css';
 
 class App extends Component {
     constructor(props) {
@@ -20,7 +22,8 @@ class App extends Component {
             editorOpen: false,
             editorSite: null,
             forceRefresh: false,
-            error: ""
+            error: "",
+            sideBarOn: true,
         }
 
         this.storage = new Storage(this.storageUpdatedSites.bind(this));
@@ -111,16 +114,19 @@ class App extends Component {
         this.storage.updateLastRead(url, channel);
     }
 
+    toggleSidebar() {
+        let newState = !this.state.sideBarOn;
+        this.setState({sideBarOn: newState});
+    }
+
     render() {
         return (
             <div className="App">
-                <Header title="Shmoofel's RSS Reader&trade;" />
-                <div className="content content--main">
-                    <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
-                    <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
-                    <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
-                </div>
-                <Footer content="RSS Reader&trade; &copy;2017 By Shmoofel Media, Powered by React and Node.js" />
+                <Header title="Shmoofel's RSS Reader&trade;" onMenu={this.toggleSidebar.bind(this)} />
+                <SideBar sites={this.state.sites} selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
+                <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
+                <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
+                <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />
             </div>
         );
     }

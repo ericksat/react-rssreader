@@ -1,0 +1,67 @@
+.main-panel {
+    background-color: white;
+    flex-grow: 1;
+    overflow: auto;
+    grid-area: main;
+}
+
+.main-panel__error {
+    margin: 4rem;
+    font-size: 2rem;
+    color: red;
+    font-weight: bold;
+}
+
+.main-rss__header {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+    background-color: #f3f3f3;
+}
+
+.main-rss__header__image {
+    height: 3rem;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+
+.main-rss__description {
+    font-size: 1.8rem;
+    font-style: italic;
+    padding: 0 2rem 2rem;
+    background-color: #f3f3f3;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #666;
+}
+
+.rss__item {
+    padding: 0 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rss__item__link { /* Also a title */
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: lightcoral;
+    font-weight: bold;
+    text-decoration: none;
+    font-variant: small-caps;
+}
+
+.rss__item__link:hover {
+    color: orange;
+}
+
+.rss__item__time {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: darkgrey;
+    padding-bottom: 1rem;
+}
+
+.rss__item__description {
+    color: black;
+    font-size: 1.35rem;
+}

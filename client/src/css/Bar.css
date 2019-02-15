@@ -1,0 +1,81 @@
+.sidebar {
+    margin-right: 1rem;
+    background-color: white;
+    min-width: 25rem;
+    width: 25rem;
+    overflow: auto;
+    grid-area: side;
+}
+
+@media (min-width: 900px) {
+    .sidebar {
+        min-width: 30rem;
+        width: 30rem;
+    }
+}
+
+.sidebar__header {
+    padding: 2rem 0 1rem;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar__header__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar__header__add {
+    font-size: 1.3rem !important;
+    padding: 0.75rem 1rem;
+    margin: 0 1rem;
+    vertical-align: middle;
+}
+
+.sidebar__sitelist {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sitelist__item {
+    flex-grow: 1;
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-left: 4px solid transparent;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    text-overflow: ellipsis;
+    align-items: center;
+}
+
+.sitelist__item--active {
+    border-left: 4px solid lightcoral;
+}
+
+.sitelist__item__title {
+    flex-grow: 1;
+    font-style: italic;
+    font-size: 1.35rem;
+    font-weight: bold;
+    padding: 0 1rem 0 0.5rem;
+    line-height: 4rem;
+    cursor: pointer;
+}
+
+.sitelist__item__edit {
+    margin-right: 0.25rem;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+.sitelist__item__delete {
+    background-color: red !important;
+    padding: 1rem 1.25rem;
+    font-size: 1.5rem;
+}
+
+.sitelist__item__delete:hover {
+    background-color: coral !important;
+}
