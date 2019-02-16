@@ -1,42 +1,46 @@
 .sidebar {
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
     background-color: white;
-    min-width: 25rem;
-    width: 25rem;
+    /* min-width: 25rem;
+    width: 25rem; */
     overflow: auto;
     grid-area: side;
+    border-right: 1px solid #000;
 }
 
-@media (min-width: 900px) {
-    .sidebar {
-        min-width: 30rem;
-        width: 30rem;
-    }
-}
+/* @media (min-width: 992px) {
+} */
 
 .sidebar__header {
-    padding: 2rem 0 1rem;
-    border-bottom: 1px solid #ddd;
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1px solid #b4b3b3;
     display: flex;
     flex-direction: column;
+    background-color: #def5ff;
 }
 
 .sidebar__header__title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 0;
 }
 
 .sidebar__header__add {
     font-size: 1.3rem !important;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     margin: 0 1rem;
     vertical-align: middle;
+    background-color: navy;
+}
+
+.sidebar__header__add:hover {
+    background-color: lightskyblue;
 }
 
 .sidebar__sitelist {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
+    text-align: left;
 }
 
 .sitelist__item {
@@ -48,6 +52,7 @@
     flex-direction: row;
     text-overflow: ellipsis;
     align-items: center;
+    transition: 0.5s;
 }
 
 .sitelist__item--active {
@@ -57,23 +62,30 @@
 .sitelist__item__title {
     flex-grow: 1;
     font-style: italic;
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: bold;
     padding: 0 1rem 0 0.5rem;
-    line-height: 4rem;
+    /* line-height: 3.75rem; */
     cursor: pointer;
+    display: inline-block;
+    padding: 0 1rem 0 0.5rem;
 }
 
 .sitelist__item__edit {
     margin-right: 0.25rem;
     padding: 1rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    background-color: darkgreen;
+}
+
+.sitelist__item__edit:hover {
+    background-color: lightgreen;
 }
 
 .sitelist__item__delete {
     background-color: red !important;
     padding: 1rem 1.25rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .sitelist__item__delete:hover {

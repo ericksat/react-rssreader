@@ -112,3 +112,15 @@ footer {
     background-color: rgba(255,255,255,0.4);
     color: white;
 }
+
+.pill {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    margin: 0 1rem;
+    border-radius: 1rem;
+    color: white;
+    background-color: #697f97;
+    text-align: center;
+    /* min-width: 2.25rem; */
+    font-weight: bold;
+}
