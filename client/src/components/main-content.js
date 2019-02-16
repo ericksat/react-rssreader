@@ -17,7 +17,7 @@ export default class MainContent extends React.Component {
     }
 
     componentWillMount() {
-        // console.log("Mounting main content");
+        // console.log("Mounting main content selected = " + this.props.selected);
         this.fetchRss(this.props);
     }
 
@@ -64,14 +64,24 @@ export default class MainContent extends React.Component {
     }
 
     render() {
+        if (this.props.selected == null) {
+            return (
+                <div className="main-panel">
+                    <h1 className="main-panel__welcome">
+                        To begin, please select a site from the sidebar.
+                    </h1>
+                </div>
+            );
+        }
+
         let classes = this.props.show ? ["main-panel"] : ["main-panel hidden"];
         let rssMain = this.state.data ? (
         <div className="main-rss">
             <div className="main-rss__header">
                 {this.state.data.image && <img className="main-rss__header__image" src={this.state.data.image} alt="Icon" /> }
-                <h1 className="main-rss__header__title">{this.state.data.title}</h1>
+                    <h1 className="main-rss__header__title" title={this.state.data.description}>{this.state.data.title}</h1>
             </div>
-            <h2 className="main-rss__description">{this.state.data.description}</h2>
+            {/* <h2 className="main-rss__description">{this.state.data.description}</h2> */}
             {this.renderItems()}
         </div>) : undefined;
 

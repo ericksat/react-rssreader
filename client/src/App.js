@@ -23,7 +23,7 @@ class App extends Component {
             editorSite: null,
             forceRefresh: false,
             error: "",
-            sideBarOn: true,
+            sideBarOn: false,
         }
 
         this.storage = new Storage(this.storageUpdatedSites.bind(this));
@@ -88,6 +88,12 @@ class App extends Component {
         this.storage.load();
         global.storage = this.storage; // For debugging
         window.app = this;
+
+        if (window.innerWidth >= 768) {
+            this.setState( {sideBarOn: true})
+        } else {
+            this.setState({ sideBarOn: false })
+        }
     }
 
     closeEditor() {

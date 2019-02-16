@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     background-color: #def5ff;
+    height: 6.2rem;
 }
 
 .sidebar__header__title {
@@ -37,7 +38,7 @@
 }
 
 .sidebar__sitelist {
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
     text-align: left;
