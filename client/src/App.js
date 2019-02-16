@@ -19,6 +19,7 @@ class App extends Component {
         this.state = {
             sites: [],
             selectedSite: null,
+            selectedSiteTitle: null,
             editorOpen: false,
             editorSite: null,
             forceRefresh: false,
@@ -40,14 +41,20 @@ class App extends Component {
 
     selectSite(id) {
         let site = this.state.sites.find((site) => site._id === id);
-        let leNew = { selectedSite: site.url, editorOpen: false, editorSite: null, forceRefresh: false };
+        let stateUpdate = {
+            selectedSite: site.url,
+            selectedSiteTitle: site.title,
+            editorOpen: false,
+            editorSite: null,
+            forceRefresh: false
+        };
         if (this.state.selectedSite === site.url && !this.state.editorOpen) { // Ask our main content nicely to refresh
-            leNew.forceRefresh = true;
+            stateUpdate.forceRefresh = true;
         }
 
-        leNew.sideBarOn = window.innerWidth >= 576;
+        stateUpdate.sideBarOn = window.innerWidth >= 576;
         // console.log("Received final id", id)
-        this.setState(leNew)
+        this.setState(stateUpdate)
     }
 
     deleteSite(id) {
@@ -134,7 +141,8 @@ class App extends Component {
                 <SideBar sites={this.state.sites} show={this.state.sideBarOn}
                 selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                 <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
-                <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
+                <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} selectedTitle={this.state.selectedSiteTitle}
+                            onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />
             </div>
         );
