@@ -8,8 +8,11 @@
     border-right: 1px solid #000;
 }
 
-/* @media (min-width: 992px) {
-} */
+@media screen and (max-width: 575px) {
+    .sidebar {
+        width: 100vw;
+    }
+}
 
 .sidebar__header {
     padding: 2rem 0 1.5rem;

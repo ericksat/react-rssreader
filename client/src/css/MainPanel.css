@@ -5,6 +5,13 @@
     grid-area: main;
 }
 
+@media screen and (max-width: 575px) {
+    .main-panel__with-sidebar {
+        display: none;
+    }
+}
+
+
 .main-panel__error {
     margin: 4rem;
     font-size: 2rem;

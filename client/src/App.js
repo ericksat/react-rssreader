@@ -44,6 +44,8 @@ class App extends Component {
         if (this.state.selectedSite === site.url && !this.state.editorOpen) { // Ask our main content nicely to refresh
             leNew.forceRefresh = true;
         }
+
+        leNew.sideBarOn = window.innerWidth >= 576;
         // console.log("Received final id", id)
         this.setState(leNew)
     }
@@ -89,7 +91,7 @@ class App extends Component {
         global.storage = this.storage; // For debugging
         window.app = this;
 
-        if (window.innerWidth >= 768) {
+        if (window.innerWidth >= 576) {
             this.setState( {sideBarOn: true})
         } else {
             this.setState({ sideBarOn: false })
@@ -132,7 +134,7 @@ class App extends Component {
                 <SideBar sites={this.state.sites} show={this.state.sideBarOn}
                 selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                 <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
-                <MainContent show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
+                <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />
             </div>
         );

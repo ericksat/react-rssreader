@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Loader from './loader';
+// import Loader from './loader';
 
 export default class Header extends React.Component {
     render() {
@@ -10,7 +10,7 @@ export default class Header extends React.Component {
             </button>
             <h1 className="App__title">
                 {this.props.title}
-                <Loader size="32" />
+                {/* <Loader size="32" /> */}
             </h1>
         </header>);
     }
