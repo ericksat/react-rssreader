@@ -76,8 +76,10 @@ class App extends Component {
         this.setState({
             editorOpen: true,
             editorSite: null,
-            selectedSite: null
+            selectedSite: null,
+            sideBarOn: window.innerWidth >= 576,
         })
+
     }
 
     openEditSite(id) {
@@ -87,7 +89,8 @@ class App extends Component {
             editorOpen: true,
             editorSite: site,
             selectedSite: null,
-            error: ""
+            error: "",
+            sideBarOn: window.innerWidth >= 576,
         })
     }
 

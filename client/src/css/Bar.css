@@ -11,6 +11,19 @@
 @media screen and (max-width: 575px) {
     .sidebar {
         width: 100vw;
+        border-right: 0 !important;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+    .sidebar {
+        max-width: 45vw;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sidebar {
+        max-width: 40vw;
     }
 }
 
