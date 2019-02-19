@@ -37,6 +37,9 @@ export default class MainContent extends React.Component {
         document.body.classList.remove('refreshing');
 
         this.boxo = document.querySelector('#main-rss');
+        if (this.boxo == null) {
+            return;
+        }
 
         this.boxo.addEventListener('touchstart', e => {
             this.startY = e.touches[0].pageY;

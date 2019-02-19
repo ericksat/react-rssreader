@@ -7,7 +7,6 @@ export default (props) => {
     let style = {
         width: props.size + "px",
         height: props.size + "px",
-        marginTop: "2rem",
     }
 
     return (

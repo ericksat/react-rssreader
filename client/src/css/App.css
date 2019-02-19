@@ -24,7 +24,8 @@ body.refreshing {
 .App__logo {
     animation: App-logo-spin infinite 20s linear;
     position: relative;
-    top: 5px;
+    top: 2.5rem;
+    border-radius: 50%;
 }
 
 .App__header {
