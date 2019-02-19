@@ -1,5 +1,10 @@
 body {
-    overscroll-behavior: none;
+    /* Disables pull-to-refresh but allows overscroll glow effects. */
+    overscroll-behavior-y: contain;
+}
+
+body.refreshing {
+    touch-action: none; /* prevent scrolling */
 }
 
 .App {

@@ -8,6 +8,9 @@ export default class MainContent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.startY = null;
+        this.boxo   = null;
+
         this.state = {
             data: null,
             loading: false,
@@ -30,6 +33,30 @@ export default class MainContent extends React.Component {
         this.fetchRss(nextProps);
     }
 
+    initBoxo() {
+        document.body.classList.remove('refreshing');
+
+        this.boxo = document.querySelector('#main-rss');
+
+        this.boxo.addEventListener('touchstart', e => {
+            this.startY = e.touches[0].pageY;
+        }, { passive: true });
+
+        this.boxo.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            // Activate custom pull-to-refresh effects when at the top of the container
+            // and user is scrolling up.
+            if (document.scrollingElement.scrollTop === 0
+                && y - this.startY > 200 &&
+                !document.body.classList.contains('refreshing'))
+            {
+                // console.log("Refreshing");
+                document.body.classList.add('refreshing');
+                this.fetchRss(this.props);
+            }
+        }, { passive: true });
+    }
+
     fetchRss(props) {
         if (!props.selected) return;
         // Fetch
@@ -47,6 +74,7 @@ export default class MainContent extends React.Component {
             });
 
             this.props.onRssFetched(props.selected, this.state.data);
+            setTimeout(() => this.initBoxo(), 1000);
         }).catch((e) => {
             this.setState({
                 error: e.message,
@@ -78,7 +106,7 @@ export default class MainContent extends React.Component {
         }
 
         let rssMain = this.state.data ? (
-            <div className="main-rss">
+            <div className="main-rss" id="main-rss">
                 <div className="main-rss__header">
                     {this.state.data.image && <img className="main-rss__header__image" src={this.state.data.image} alt="Icon" /> }
                         <h1 className="main-rss__header__title" title={this.state.data.description}>{this.props.selectedTitle}</h1>
@@ -90,7 +118,7 @@ export default class MainContent extends React.Component {
         return (
             <div className={classes}>
                 {this.state.error && (<div className="main-panel__error">Error: {this.state.error}</div>) }
-                {this.state.loading && <Loader size="120" />}
+                {this.state.loading && <Loader size="64" />}
                 { rssMain }
             </div>
         );
