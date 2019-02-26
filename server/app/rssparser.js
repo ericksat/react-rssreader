@@ -6,10 +6,12 @@ const formatOpts = { ignoreAttrs: true, explicitArray: false }; // Used by xmlPa
 const arrayOrStringOrNothing = (input, defaultValue = "") => {
     if (!input) return defaultValue;
     if (typeof input === "string") {
-        return input.replace(/<(?:.|\n)*?>/gm, '');
+        let filtered = input.replace(/<(?:.|\n)*?>/gm, '');
+        // console.log(filtered.trim());
+        return filtered.trim();
     } else if (typeof input === "object") { // Found this monster in my old Superkids RSS
-        // console.log("Input is not a string");
-        // console.log(JSON.stringify(input, null, 2));
+        console.log("Input is not a string");
+        console.log(JSON.stringify(input, null, 2));
         let text = "";
         for (let key in input) {
             text += input[key] + " ";
@@ -33,10 +35,17 @@ const formatContent = async (xmlContent) => {
     let finalItems = [];
 
     for (let item of channel.item) {
+        let date;
+        if (item.updated) {
+            date = new Date(item.updated);
+        } else {
+            date = new Date(item.pubDate);
+        }
+
         finalItems.push({
             title: arrayOrStringOrNothing(item.title, "Untitled"),
-            pubDate: new Date(item.pubDate),
-            tstamp: new Date(item.pubDate).getTime(),
+            pubDate: date,
+            tstamp: date.getTime(),
             link: arrayOrStringOrNothing(item.link, "No link"),
             description: arrayOrStringOrNothing(item.description, "")
         });
