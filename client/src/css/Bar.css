@@ -6,24 +6,28 @@
     overflow: auto;
     grid-area: side;
     border-right: 1px solid #000;
+    transition: 0.3s;
+    margin-left: 0;
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 639px) {
     .sidebar {
         width: 100vw;
         border-right: 0 !important;
     }
-}
 
-@media screen and (min-width: 576px) and (max-width: 767px) {
-    .sidebar {
-        max-width: 45vw;
+    .sidebar.sidebar-hidden {
+        margin-left: -100vw;
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 640px) and (max-width: 1023px) {
     .sidebar {
         max-width: 40vw;
+    }
+
+    .sidebar.sidebar-hidden {
+        margin-left: -40vw;
     }
 }
 
@@ -32,7 +36,13 @@
         max-width: 30vw;
         min-width: 22vw;
     }
+
+    .sidebar.sidebar-hidden {
+        margin-left: -30vw;
+    }
 }
+
+
 
 .sidebar__header {
     padding: 2rem 0 1.5rem;

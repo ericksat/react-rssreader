@@ -3,11 +3,23 @@
     flex-grow: 1;
     overflow: auto;
     grid-area: main;
+    transition: 0.3s;
+    margin-left: 0;
 }
 
-@media screen and (max-width: 575px) {
+@keyframes hideMe {
+    0% { width: 100vw; }
+    100% { width: 0vw; }
+}
+
+@media screen and (max-width: 639px) {
+    .main-panel {
+        width: 100vw;
+    }
+
     .main-panel__with-sidebar {
-        display: none;
+        animation: hideMe 0.1s forwards;
+        animation-delay: 0.3s;
     }
 
     .main-rss__header__title {

@@ -16,6 +16,8 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        this.viewModeSwitch = 640; // At what pixels do we switch to 2 panels
+
         this.state = {
             sites: [],
             selectedSite: null,
@@ -52,7 +54,8 @@ class App extends Component {
             stateUpdate.forceRefresh = true;
         }
 
-        stateUpdate.sideBarOn = window.innerWidth >= 576;
+        stateUpdate.sideBarOn = window.outerWidth >= this.viewModeSwitch;
+        console.log(`INNERWIDTH = ${window.outerWidth}, LIMIT = ${this.viewModeSwitch}, RESULT = ${stateUpdate.sideBarOn}`)
         // console.log("Received final id", id)
         this.setState(stateUpdate)
     }
@@ -77,7 +80,7 @@ class App extends Component {
             editorOpen: true,
             editorSite: null,
             selectedSite: null,
-            sideBarOn: window.innerWidth >= 576,
+            sideBarOn: window.outerWidth >= this.viewModeSwitch,
         })
 
     }
@@ -90,7 +93,7 @@ class App extends Component {
             editorSite: site,
             selectedSite: null,
             error: "",
-            sideBarOn: window.innerWidth >= 576,
+            sideBarOn: window.outerWidth >= this.viewModeSwitch,
         })
     }
 
@@ -101,7 +104,7 @@ class App extends Component {
         global.storage = this.storage; // For debugging
         window.app = this;
 
-        if (window.innerWidth >= 576) {
+        if (window.outerWidth >= this.viewModeSwitch) {
             this.setState( {sideBarOn: true})
         } else {
             this.setState({ sideBarOn: false })

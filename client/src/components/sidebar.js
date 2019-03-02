@@ -25,7 +25,7 @@ export default class SideBar extends React.Component {
     onSiteListClick(e) {
         e.stopPropagation();
         let tgt = e.target;
-        console.log(tgt);
+        // console.log(tgt);
         // If clicked on image, we'll go up one step
         if (e.target.tagName === "I") {
             tgt = e.target.parentNode;
@@ -63,7 +63,7 @@ export default class SideBar extends React.Component {
     }
 
     render() {
-        let classes = this.props.show ? ["sidebar"] : ["sidebar hidden"];
+        let classes = this.props.show ? ["sidebar"] : ["sidebar sidebar-hidden"];
         return (
             <div className={classes}>
                 <div>
