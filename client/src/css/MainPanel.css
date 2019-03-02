@@ -12,7 +12,7 @@
     100% { width: 0vw; }
 }
 
-@media screen and (max-width: 639px) {
+@media screen and (max-width: 799px) {
     .main-panel {
         width: 100vw;
     }

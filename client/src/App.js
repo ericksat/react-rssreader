@@ -16,7 +16,9 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.viewModeSwitch = 640; // At what pixels do we switch to 2 panels
+        this.currentWindowWidth = null;
+        this.viewModeSwitch = 800; // At what pixels do we switch to 2 panels
+        this.viewModeMobile = null; // Will be set on componentDidMount
 
         this.state = {
             sites: [],
@@ -54,8 +56,8 @@ class App extends Component {
             stateUpdate.forceRefresh = true;
         }
 
-        stateUpdate.sideBarOn = window.outerWidth >= this.viewModeSwitch;
-        console.log(`INNERWIDTH = ${window.outerWidth}, LIMIT = ${this.viewModeSwitch}, RESULT = ${stateUpdate.sideBarOn}`)
+        stateUpdate.sideBarOn = !this.viewModeMobile;
+        // console.log(`INNERWIDTH = ${window.outerWidth}, LIMIT = ${this.viewModeSwitch}, RESULT = ${stateUpdate.sideBarOn}`)
         // console.log("Received final id", id)
         this.setState(stateUpdate)
     }
@@ -80,7 +82,7 @@ class App extends Component {
             editorOpen: true,
             editorSite: null,
             selectedSite: null,
-            sideBarOn: window.outerWidth >= this.viewModeSwitch,
+            sideBarOn: !this.viewModeMobile,
         })
 
     }
@@ -93,26 +95,47 @@ class App extends Component {
             editorSite: site,
             selectedSite: null,
             error: "",
-            sideBarOn: window.outerWidth >= this.viewModeSwitch,
+            sideBarOn: !this.viewModeMobile,
         })
     }
 
     componentDidMount() {
-        console.log("Mounting app");
+        console.log("Mounted app, width");
         // window.sessionStorage.clear(); // Give us a fresh start while we're testing.
         this.storage.load();
         global.storage = this.storage; // For debugging
         window.app = this;
 
-        if (window.outerWidth >= this.viewModeSwitch) {
-            this.setState( {sideBarOn: true})
-        } else {
-            this.setState({ sideBarOn: false })
+        this.checkWidth();
+        window.setInterval(() => this.checkWidth(), 500);
+    }
+
+    checkWidth() {
+        if (this.currentWindowWidth === window.outerWidth) return;
+        console.log("Width changed");
+        this.currentWindowWidth = window.outerWidth;
+
+        let currentViewMode = this.viewModeMobile;
+        this.viewModeMobile = window.outerWidth < this.viewModeSwitch;
+        if (currentViewMode === null) { // Initialize the sidebar for the first time
+            if (this.viewModeMobile) {
+                this.setState({ sideBarOn: false })
+            } else {
+                this.setState({ sideBarOn: true })
+            }
+        }
+        else if (!this.viewModeMobile && this.state.sideBarOn === false) {
+             this.setState( { sideBarOn: true })
         }
     }
 
     closeEditor() {
-        this.setState({ editorOpen: false, editorSite: null, selectedSite: null });
+        console.log("DFDAFAAF");
+        this.setState({ editorOpen: false,
+            editorSite: null,
+            selectedSite: null,
+            sideBarOn: true, // Keep it on no matter what view mode we're in
+        });
     }
 
     /** Updates or inserts site */
