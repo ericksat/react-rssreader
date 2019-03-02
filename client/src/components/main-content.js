@@ -96,7 +96,7 @@ export default class MainContent extends React.Component {
 
     render() {
         let classes = this.props.show ? "main-panel" : "main-panel hidden";
-        if (this.props.sideBarOn) classes += " main-panel__with-sidebar";
+        if (this.props.show && this.props.sideBarOn) classes += " main-panel__with-sidebar";
 
         if (this.props.selected == null) {
             return (

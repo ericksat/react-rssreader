@@ -1,25 +1,14 @@
 .main-panel {
     background-color: white;
-    flex-grow: 1;
     overflow: auto;
     grid-area: main;
-    transition: 0.3s;
-    margin-left: 0;
-}
-
-@keyframes hideMe {
-    0% { width: 100vw; }
-    100% { width: 0vw; }
+    transition: transform 0.3s;
+    transform: translateX(0);
 }
 
 @media screen and (max-width: 799px) {
-    .main-panel {
-        width: 100vw;
-    }
-
     .main-panel__with-sidebar {
-        animation: hideMe 0.1s forwards;
-        animation-delay: 0.3s;
+        transform: translateX(100vw);
     }
 
     .main-rss__header__title {
@@ -29,6 +18,13 @@
 
     .rss__item__link { /* Also a title */
         font-size: 1.6rem !important;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .main-panel__with-sidebar {
+        transform: translateX(30vw);
+        width: 70vw;
     }
 }
 
