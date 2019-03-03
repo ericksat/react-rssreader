@@ -59,6 +59,8 @@
     border-bottom: 1px solid #b4b3b3;
     margin-bottom: 1.5rem;
     font-variant: small-caps;
+    position: sticky;
+    top: 0;
 }
 
 .main-rss__header__title {

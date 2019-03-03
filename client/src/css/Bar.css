@@ -42,6 +42,8 @@
     flex-direction: column;
     background-color: #def5ff;
     height: 6.2rem;
+    position: sticky;
+    top: 0;
 }
 
 .sidebar__header__title {
