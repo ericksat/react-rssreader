@@ -17,7 +17,7 @@ class App extends Component {
         super(props);
 
         this.currentWindowWidth = null;
-        this.viewModeSwitch = 800; // At what pixels do we switch to 2 panels
+        this.viewModeSwitch = 640; // At what pixel-width do we switch to 2 panels
         this.viewModeMobile = null; // Will be set on componentDidMount
 
         this.state = {

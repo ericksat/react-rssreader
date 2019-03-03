@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import logo from '../logo.svg';
 import reader from '../reader.png';
 
 export default (props) => {

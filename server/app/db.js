@@ -6,7 +6,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 
 let db = mongoose.connection;
 db.on('error', (e) => {
