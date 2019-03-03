@@ -59,6 +59,7 @@ export default class Editor extends React.Component {
 
     render() {
         let classes = this.props.show ? ["editor"] : ["editor hidden"];
+        if (this.props.show && this.props.sideBarOn) classes += " main-panel__with-sidebar";
 
         return (
             <div className={classes}>

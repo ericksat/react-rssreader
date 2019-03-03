@@ -124,7 +124,7 @@ class App extends Component {
                 this.setState({ sideBarOn: true })
             }
         }
-        else if (!this.viewModeMobile && this.state.sideBarOn === false) {
+        else if (!this.viewModeMobile && this.viewModeMobile !== currentViewMode && this.state.sideBarOn === false) {
              this.setState( { sideBarOn: true })
         }
     }
@@ -169,7 +169,7 @@ class App extends Component {
                 <Header title="Shmoofel's RSS Reader&trade;" onMenu={this.toggleSidebar.bind(this)} />
                 <SideBar sites={this.state.sites} show={this.state.sideBarOn}
                 selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
-                <Editor show={this.state.editorOpen} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
+                <Editor show={this.state.editorOpen} sideBarOn={this.state.sideBarOn} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
                 <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} selectedTitle={this.state.selectedSiteTitle}
                             onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />

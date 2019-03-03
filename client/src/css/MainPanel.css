@@ -23,8 +23,8 @@
 
 @media screen and (min-width: 800px) {
     .main-panel__with-sidebar {
-        transform: translateX(30vw);
-        width: 70vw;
+        transform: translateX(30rem);
+        width: calc(100vw - 30rem);
     }
 }
 

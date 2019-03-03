@@ -17,9 +17,9 @@
 
 @media screen and (min-width: 800px) {
     .sidebar {
-        width: 30vw;
-        margin-left: -30vw;
-        transform: translateX(30vw);
+        width: 30rem;
+        margin-left: -30rem;
+        transform: translateX(30rem);
     }
 }
 
