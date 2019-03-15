@@ -58,8 +58,8 @@ export class LastReadInfo {
 export default class LastReadManager {
     constructor(sites, updateParentCallback) {
         this.key = "lastItemsRead";
-        this.minCheckTime = 120000; // A pause between new item pollings
-        this.syncInterval = 2000; // When we start polling, check each site separately, with a small interval (counted AFTER response is received)
+        this.minCheckTime = 10 * 60 * 1000; // A pause between new item pollings
+        this.syncInterval = 3000; // When we start polling, check each site separately, with a small interval (counted AFTER response is received)
 
         this.sites = sites;
         this.sites.forEach(element => { // Initialize each lastReadInfo structure

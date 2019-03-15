@@ -4,21 +4,13 @@ import SideBarHeader from './sidebar-header';
 import SideBarSite from './sidebar-site';
 
 export default class SideBar extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            selected: null
-        };
-    }
-
     renderSiteList() {
         function cmp(a, b) {
             return a.title.localeCompare(b.title);
         }
         // The concat creates a copy of the array
         return this.props.sites.concat().sort(cmp).map((site) => {
-            return <SideBarSite key={site._id} site={site} active={this.state.selected === site._id} />
+            return <SideBarSite key={site._id} site={site} active={this.props.selected === site._id} />
         });
     }
 
@@ -47,7 +39,6 @@ export default class SideBar extends React.Component {
 
     selectSite(id) {
         this.props.selectSite(id);
-        this.setState({selected: id});
     }
 
     deleteSite(id) {
