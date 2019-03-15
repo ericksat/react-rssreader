@@ -19,6 +19,8 @@ class App extends Component {
         this.currentWindowWidth = null;
         this.viewModeSwitch = 640; // At what pixel-width do we switch to 2 panels
         this.viewModeMobile = null; // Will be set on componentDidMount
+        /** Ugly hack to prevent reloading of content when going back in mobile when menu is on (yes, it's that specific!) */
+        this.ignorePopState = false;
 
         this.state = {
             sites: [],
@@ -128,10 +130,21 @@ class App extends Component {
         window.setInterval(() => this.checkWidth(), 500);
 
         window.onpopstate = (e) => {
-            if (e.state && e.state.siteId) {
-                this.selectSite(e.state.siteId, false);
-            } else { // Unselect everything
-                this.closeEditor();
+            if (this.ignorePopState) {
+                this.ignorePopState = false;
+                return;
+            }
+
+            if (this.viewModeMobile && this.state.sideBarOn) {
+                this.ignorePopState = true;
+                window.history.forward();
+                this.setState({sideBarOn: false});
+            } else {
+                if (e.state && e.state.siteId) {
+                    this.selectSite(e.state.siteId, false);
+                } else { // Unselect everything
+                    this.closeEditor();
+                }
             }
         }
     }
