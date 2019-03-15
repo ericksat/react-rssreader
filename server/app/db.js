@@ -1,8 +1,7 @@
 const { ObjectID } = require('mongodb')
 const mongoose = require('mongoose')
 if (!process.env.MONGODB_URI) {
-    // throw Error("Mongodb uri is missing!")
-    process.env.MONGODB_URI = "mongodb://ericksat:123mongoman321@ds251435.mlab.com:51435/zalupka";
+    throw Error("Mongodb uri is missing!")
 }
 
 mongoose.Promise = global.Promise;

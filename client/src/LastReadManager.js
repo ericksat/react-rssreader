@@ -72,6 +72,8 @@ export default class LastReadManager {
     }
 
     selectNextSite() {
+        if (!this.sites.length) return null;
+
         return this.sites.reduce((prev, site) => {
             if (prev === undefined) return site;
             return site.lastRead.recentCheck < prev.lastRead.recentCheck ? site : prev;
@@ -100,6 +102,7 @@ export default class LastReadManager {
     sync() {
         // Pull a site from the queue
         let candidate = this.selectNextSite();
+        if (!candidate) return;
         let recentCheck = candidate.lastRead.recentCheck;
         // A bit of throttling
         if ( Date.now() - recentCheck  < this.minCheckTime) {
