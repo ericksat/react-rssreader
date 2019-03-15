@@ -44,6 +44,7 @@ class App extends Component {
     }
 
     selectSite(id) {
+        // console.log("Selecting site " + id);
         let site = this.state.sites.find((site) => site._id === id);
         let stateUpdate = {
             selectedSite: site.url,
@@ -63,7 +64,7 @@ class App extends Component {
     }
 
     deleteSite(id) {
-        console.log("Deleting " + id);
+        // console.log("Deleting " + id);
         this.storage.remove(id);
     }
 
@@ -100,7 +101,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        console.log("Mounted app, width");
+        // console.log("Mounted app, width");
         // window.sessionStorage.clear(); // Give us a fresh start while we're testing.
         this.storage.load();
         global.storage = this.storage; // For debugging
@@ -112,7 +113,7 @@ class App extends Component {
 
     checkWidth() {
         if (this.currentWindowWidth === window.outerWidth) return;
-        console.log("Width changed");
+        // console.log("Width changed");
         this.currentWindowWidth = window.outerWidth;
 
         let currentViewMode = this.viewModeMobile;
@@ -130,7 +131,6 @@ class App extends Component {
     }
 
     closeEditor() {
-        console.log("DFDAFAAF");
         this.setState({ editorOpen: false,
             editorSite: null,
             selectedSite: null,
@@ -140,11 +140,13 @@ class App extends Component {
 
     /** Updates or inserts site */
     saveSite(id, site) {
-        // console.log(`App:SaveSite ID ${id}`);
         try {
             this.setState({ error: "" })
-            this.storage.save(id, site);
-            this.closeEditor();
+            this.storage.save(id, site).then((storedId) => {
+                // console.log(`App:SaveSite ID ${storedId}`);
+                this.closeEditor();
+                this.selectSite(storedId);
+            });
         } catch (e) {
             this.setState({ error: e.message });
         }

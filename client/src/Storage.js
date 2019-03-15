@@ -103,39 +103,46 @@ export default class Storage {
      * @param {Object} site with title and url
      */
     save(siteId, site) {
-        // Verify that url does not exist
-        if (!this.verifyUrlNotExists(site.url, siteId)) {
-            throw new Error("Sorry, this url exists already. Try another.");
-        }
-        // Update local first
-        // console.log("Updating local copy");
-        let lastSites = Object.assign(this.sites); // Keep copy in case of server error
-        let tempId;
-        if (siteId) {
-            this.update(siteId, site)
-        } else {
-            tempId = this.create(site);
-        }
-        // Now update the server
-        // console.log("Updating server");
-        let opts = {
-            headers: global.jsonHeaders,
-            method: siteId ? "PUT" : "POST",
-            body: JSON.stringify({ site })
-        };
-        let url = siteId ? "/sites/" + siteId : "/sites";
+        return new Promise((resolve, reject) => {
+            // Verify that url does not exist
+            if (!this.verifyUrlNotExists(site.url, siteId)) {
+                throw new Error("Sorry, this url exists already. Try another.");
+            }
+            // Update local first
+            // console.log("Updating local copy");
+            let lastSites = Object.assign(this.sites); // Keep copy in case of server error
+            let tempId;
+            if (siteId) {
+                this.update(siteId, site)
+            } else {
+                tempId = this.create(site);
+            }
+            // Now update the server
+            // console.log("Updating server");
+            let opts = {
+                headers: global.jsonHeaders,
+                method: siteId ? "PUT" : "POST",
+                body: JSON.stringify({ site })
+            };
+            let url = siteId ? "/sites/" + siteId : "/sites";
 
-        fetch(url, opts).then((res) => res.json()).then((json) => {
-            if (!json.success) {
-                throw new Error(json.error);
-            }
-            // console.log(`Updated server, json.id ${json.id} tempId ${tempId}`);
-            if (json.id && tempId) {
-                this.updateTempId(tempId, json.id);
-            }
-        }).catch((err) => {
-            console.log(err);
-            this.rollback(lastSites);
+            fetch(url, opts)
+            .then((res) => res.json())
+            .then((json) => {
+                if (!json.success) {
+                    throw new Error(json.error);
+                }
+                // console.log(`Updated server, json.id ${json.id} tempId ${tempId}`);
+                if (json.id && tempId) {
+                    this.updateTempId(tempId, json.id);
+                }
+
+                resolve(siteId ? siteId : json.id);
+            }).catch((err) => {
+                console.log(err);
+                this.rollback(lastSites);
+                reject(err);
+            })
         })
     }
 
@@ -189,7 +196,7 @@ export default class Storage {
             this.sites[pos]._id = remoteId;
             this.store();
             this.updateParentCallback(this.sites);
-            console.log(`Updated tempID ${tempId} to ${remoteId}`);
+            // console.log(`Updated tempID ${tempId} to ${remoteId}`);
         }
     }
 
