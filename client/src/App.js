@@ -86,7 +86,7 @@ class App extends Component {
                 // console.log("Title = " + title);
                 // console.log(this.state.sites);
                 let site = this.state.sites.find((site) => site.title === title);
-                if (site) {
+                if (site && site._id !== this.state.selectedSiteId) {
                     this.selectSite(site._id, false);
                 }
             }
