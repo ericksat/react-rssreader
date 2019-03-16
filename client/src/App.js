@@ -46,9 +46,13 @@ class App extends Component {
         this.rssFetched = this.rssFetched.bind(this);
     }
 
-    selectSite(id, pushToHistory = true) {
+    selectSite(id, pushToHistory = true, clearFromStorage = true) {
         // console.log("Selecting site " + id);
         let site = this.state.sites.find((site) => site._id === id);
+        if (clearFromStorage) {
+            this.storage.clearSiteData(site.url);
+        }
+
         let stateUpdate = {
             selectedSite: site.url,
             selectedSiteTitle: site.title,
@@ -141,7 +145,7 @@ class App extends Component {
                 this.setState({sideBarOn: false});
             } else {
                 if (e.state && e.state.siteId) {
-                    this.selectSite(e.state.siteId, false);
+                    this.selectSite(e.state.siteId, false, false);
                 } else { // Unselect everything
                     this.closeEditor();
                 }
@@ -196,6 +200,7 @@ class App extends Component {
      */
     rssFetched(url, channel) {
         this.storage.updateLastRead(url, channel);
+        this.storage.storeSiteData(url, channel);
     }
 
     toggleSidebar() {
@@ -210,8 +215,8 @@ class App extends Component {
                 <SideBar sites={this.state.sites} show={this.state.sideBarOn} selected={this.state.selectedSiteId}
                 selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
                 <Editor show={this.state.editorOpen} sideBarOn={this.state.sideBarOn} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
-                <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} selectedTitle={this.state.selectedSiteTitle}
-                            onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
+                <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} storage={this.storage}
+                            selectedTitle={this.state.selectedSiteTitle} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />
             </div>
         );

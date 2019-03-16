@@ -55,14 +55,26 @@ export default class MainContent extends React.Component {
             {
                 // console.log("Refreshing");
                 document.body.classList.add('refreshing');
-                this.fetchRss(this.props);
+                this.fetchRss(this.props, false);
             }
         }, { passive: true });
     }
 
-    fetchRss(props) {
+    fetchRss(props, useStored = true) {
         if (!props.selected) return;
         // Fetch
+        if (useStored) {
+            let stored = props.storage.getSiteData(props.selected);
+            if (stored) {
+                console.log("Exists in storage");
+                this.setState({
+                    loading: false,
+                    data: stored,
+                })
+                return;
+            }
+        }
+
         this.setState({ data: null, loading: true, error: null });
         let url = "/rss/" + Base64.encode(props.selected);
         // console.log("Will fetch", url);

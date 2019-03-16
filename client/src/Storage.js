@@ -239,6 +239,24 @@ export default class Storage {
         this.store(); // Store in session/local-storage.
         this.updateParentCallback(this.sites); // Update the UI
     }
+
+    storeSiteData(name, remoteData) {
+        window.sessionStorage['rssReader-sitedata-' + name] = JSON.stringify(remoteData);
+    }
+
+    getSiteData(name) {
+        const key = 'rssReader-sitedata-' + name;
+        if (window.sessionStorage[key]) {
+            return JSON.parse(window.sessionStorage[key]);
+        }
+    }
+
+    clearSiteData(name) {
+        const key = 'rssReader-sitedata-' + name;
+        if (window.sessionStorage[key]) {
+            delete(window.sessionStorage[key]);
+        }
+    }
 }
 
 Storage.siteFields = ["title", "url", "_id"];
