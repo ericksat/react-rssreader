@@ -32,6 +32,9 @@ body.refreshing {
 
 .App__header {
     background-color: darkred;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.2));
+    box-shadow: 0 0 8px rgba(0,0,0,0.75);
+    z-index: 100;
     padding: 1rem 0 1rem 0;
     color: white;
     grid-area: header;
