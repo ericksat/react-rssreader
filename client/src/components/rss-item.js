@@ -8,13 +8,16 @@ function replaceSomeEntities(src) {
         "&#039;": "\u0027",
         "&#160;": " ",
     };
-    return src.replace(/&#8217;|&#8216;|&#039|&#160;/g, function (matched) {
+    return src.replace(/&#8217;|&#8216;|&#039;|&#160;/g, function (matched) {
         // let dookoo = matched.substr(2, matched.length - 3);
         // console.log(dookoo);
         // let hex = parseInt(dookoo).toString(16);
         // if (hex.length < 4) {
         //     hex = hex.padStart(4, '0');
         // }
+
+        // console.log(matched);
+        // console.log(mapObj[matched]);
 
         return mapObj[matched];
     });
