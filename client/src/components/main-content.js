@@ -42,20 +42,29 @@ export default class MainContent extends React.Component {
         }
 
         this.boxo.addEventListener('touchstart', e => {
-            this.startY = e.touches[0].pageY;
+            if (document.querySelector(".main-panel").scrollTop === 0) {
+                // console.log("Started refresh code");
+                this.startY = e.touches[0].pageY;
+            }
         }, { passive: true });
 
         this.boxo.addEventListener('touchmove', e => {
             const y = e.touches[0].pageY;
+            // A scroll down will cancel the test from pull-to-refresh
+            if (this.startY && y - this.startY < 0) {
+                // console.log("Canceling check of refresh");
+                this.startY = null;
+            }
+
             // Activate custom pull-to-refresh effects when at the top of the container
             // and user is scrolling up.
-            if (document.scrollingElement.scrollTop === 0
-                && y - this.startY > 200 &&
+            if (this.startY && y - this.startY > 200 &&
                 !document.body.classList.contains('refreshing'))
             {
                 // console.log("Refreshing");
                 document.body.classList.add('refreshing');
                 this.fetchRss(this.props, false);
+                this.startY = null; // Until the next touchstart
             }
         }, { passive: true });
     }
