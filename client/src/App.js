@@ -217,7 +217,7 @@ class App extends Component {
         document.addEventListener('touchstart', e => {
             const x = e.touches[0].pageX;
             const y = e.touches[0].pageY;
-            if (x > this.currentWindowWidth / 2) return;
+            // if (x > this.currentWindowWidth / 2) return;
             startX = x;
             startY = y;
             // console.log("Sidebar touch start on " + startX);
@@ -229,7 +229,7 @@ class App extends Component {
             const y = e.touches[0].pageY;
             // console.log("Touch move " + (x - startX));
 
-            if (Math.abs(y - startY) >= 75) {
+            if (Math.abs(y - startY) >= 90) {
                 // console.log("Cancel swipe based on Y");
                 startX = null;
                 return;
@@ -239,7 +239,7 @@ class App extends Component {
             if (this.state.sideBarOn === false && x - startX >= 150) {
                 this.setState({ sideBarOn: true })
                 startX = null;
-            } else if (this.state.sideBarOn === true && startX - x >= 120 && Math.abs(y - startY) < 50) {
+            } else if (this.state.sideBarOn === true && startX - x >= 150) {
                 startX = null;
                 this.setState({ sideBarOn: false })
             }
