@@ -151,6 +151,8 @@ class App extends Component {
                 }
             }
         }
+
+        this.initTouchEvent();
     }
 
     checkWidth() {
@@ -206,6 +208,46 @@ class App extends Component {
     toggleSidebar() {
         let newState = !this.state.sideBarOn;
         this.setState({sideBarOn: newState});
+    }
+
+    initTouchEvent() {
+        console.log("init touch event");
+        let startX = null, startY = null;
+
+        document.addEventListener('touchstart', e => {
+            const x = e.touches[0].pageX;
+            const y = e.touches[0].pageY;
+            if (x > this.currentWindowWidth / 2) return;
+            startX = x;
+            startY = y;
+            // console.log("Sidebar touch start on " + startX);
+        }, { passive: true });
+
+        document.addEventListener('touchmove', e => {
+            if (startX === null) return;
+            const x = e.touches[0].pageX;
+            const y = e.touches[0].pageY;
+            // console.log("Touch move " + (x - startX));
+
+            if (Math.abs(y - startY) >= 75) {
+                // console.log("Cancel swipe based on Y");
+                startX = null;
+                return;
+            }
+
+            // Check for menu open event
+            if (this.state.sideBarOn === false && x - startX >= 150) {
+                this.setState({ sideBarOn: true })
+                startX = null;
+            } else if (this.state.sideBarOn === true && startX - x >= 120 && Math.abs(y - startY) < 50) {
+                startX = null;
+                this.setState({ sideBarOn: false })
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            startX = null;
+        });
     }
 
     render() {
