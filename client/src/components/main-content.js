@@ -19,7 +19,7 @@ export default class MainContent extends React.Component {
         this.limit = 80; // Character limit for fetched items
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // console.log("Mounting main content selected = " + this.props.selected);
         this.fetchRss(this.props);
     }
@@ -115,6 +115,13 @@ export default class MainContent extends React.Component {
         }));
     }
 
+    headerImage() {
+        if (this.state.data.image) return <img className="main-rss__header__image" src={this.state.data.image} alt="Icon" />
+        return <div className="main-rss__header__icon">
+                <i className="fas fa-rss"></i>
+            </div>
+    }
+
     render() {
         let classes = this.props.show ? "main-panel" : "main-panel hidden";
         if (this.props.show && this.props.sideBarOn) classes += " main-panel__with-sidebar";
@@ -132,8 +139,8 @@ export default class MainContent extends React.Component {
         let rssMain = this.state.data ? (
             <div className="main-rss" id="main-rss">
                 <div className="main-rss__header">
-                    {this.state.data.image && <img className="main-rss__header__image" src={this.state.data.image} alt="Icon" /> }
-                        <h1 className="main-rss__header__title" title={this.state.data.description}>{this.props.selectedTitle}</h1>
+                    { this.headerImage() }
+                    <h1 className="main-rss__header__title" title={this.state.data.description}>{this.props.selectedTitle}</h1>
                 </div>
                 {/* <h2 className="main-rss__description">{this.state.data.description}</h2> */}
                 {this.renderItems()}

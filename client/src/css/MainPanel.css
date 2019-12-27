@@ -73,10 +73,23 @@
 
 .main-rss__header__image {
     height: 2.5rem;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     display: inline-block;
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.main-rss__header__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    margin-right: 0.5rem;
+    color: #39a0bf;
+}
+
+.main-rss__header__icon i {
+    font-size: 1.5rem;
 }
 
 .main-rss__description {

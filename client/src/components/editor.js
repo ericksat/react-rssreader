@@ -14,7 +14,7 @@ export default class Editor extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.fillState(this.props);
     }
 

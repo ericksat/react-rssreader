@@ -81,11 +81,8 @@ app.delete('/sites/:id', (req, res) => {
 
 app.get("/rss/:base64", async (req, res) => {
     try {
-        // console.log("Looking for", req.params.id)
         // let found = await siteModel.findById(req.params.id);
-        // console.log(found);
         // if (!found || !found.url) throw new Error("ID Not found!");
-        // console.log("fetching", found.url);
         let url = Base64.decode(req.params.base64);
         let channel = await parser.request(url);
         res.send({ success: true, channel });
@@ -98,7 +95,7 @@ app.get("/rss-items/:base64", async(req, res) => {
     try {
         let url = Base64.decode(req.params.base64);
         let lastRead = req.query.lastRead;
-        let info = await parser.rssTest(url, lastRead);
+        let info = await parser.newItemTest(url, lastRead);
 
         res.send({success: true, url, lastRead, ...info})
     } catch (e) {
