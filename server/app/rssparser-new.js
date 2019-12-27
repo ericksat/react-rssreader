@@ -13,14 +13,15 @@ const formatContent = (feed) => {
 
         finalItems.push({
             title: item.title,
-            pubDate: Date(item.isoDate),
-            tstamp: Date(item.isoDate),
+            pubDate: Date.parse(item.isoDate),
+            tstamp: Date.parse(item.isoDate),
             link: item.link || "",
             description: summary,
         });
     }
-    // Some stinking sites (like Fake News) mess with the items, so they're not in order. I will ENFORCE this to avoid changing the entire app.
+
     finalItems.sort((a, b) => b.tstamp - a.tstamp);
+
     let image = feed.image ? feed.image.url : null;
     if (image !== null && image.indexOf(".ico") !== -1) image = null; // Because... why?
 
