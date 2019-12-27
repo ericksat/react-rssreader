@@ -22,7 +22,7 @@
     "js-base64": "^2.5.1",
     "mongodb": "^3.4.1",
     "mongoose": "^5.8.3",
-    "xml2js": "^0.4.23"
+    "rss-parser": "^3.7.3"
   },
   "devDependencies": {
     "eslint": "5.12.0",

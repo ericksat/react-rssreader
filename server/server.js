@@ -12,8 +12,8 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const Base64 = require('js-base64').Base64;
 
-const rssParser = require('./app/rssparser').request;
-const rssTest = require('./app/rssparser').newTest;
+const parser = require('./app/rssparser-new');
+// const rssTest = require('./app/rssparser').newTest;
 const db = require('./app/db'); // This is important to initialize MongoDB - don't delete or comment out!
 // Models
 const siteModel = require('./app/site');
@@ -87,7 +87,7 @@ app.get("/rss/:base64", async (req, res) => {
         // if (!found || !found.url) throw new Error("ID Not found!");
         // console.log("fetching", found.url);
         let url = Base64.decode(req.params.base64);
-        let channel = await rssParser(url);
+        let channel = await parser.request(url);
         res.send({ success: true, channel });
     } catch (e) {
         res.send({ success: false, error: e.message });
@@ -98,7 +98,7 @@ app.get("/rss-items/:base64", async(req, res) => {
     try {
         let url = Base64.decode(req.params.base64);
         let lastRead = req.query.lastRead;
-        let info = await rssTest(url, lastRead);
+        let info = await parser.rssTest(url, lastRead);
 
         res.send({success: true, url, lastRead, ...info})
     } catch (e) {
