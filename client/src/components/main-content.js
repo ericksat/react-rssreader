@@ -12,25 +12,34 @@ export default class MainContent extends React.Component {
         this.boxo   = null;
 
         this.state = {
+            selected: null,
             data: null,
             loading: false,
-            error: null
+            error: null,
+            siteKey: null,
         }
         this.limit = 80; // Character limit for fetched items
     }
 
     componentDidMount() {
         // console.log("Mounting main content selected = " + this.props.selected);
-        this.fetchRss(this.props);
+        this.fetchRss();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.selected === this.props.selected && !nextProps.forceRefresh) {
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.selected === prevState.selected && nextProps.siteKey === prevState.siteKey) {
             // console.log("Nextprops equals current content props.");
-            return;
+            return null;
         }
-        // console.log("Updating main content", nextProps.selected, this.props.selected);
-        this.fetchRss(nextProps);
+        // console.log(`Received props: main content ${nextProps.selected} vs ${prevState.selected}`);
+        return { selected: nextProps.selected, siteKey: nextProps.siteKey }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.selected !== this.state.selected || prevState.siteKey !== this.state.siteKey) {
+            // console.log("Fetching RSS");
+            this.fetchRss();
+        }
     }
 
     initBoxo() {
@@ -63,13 +72,14 @@ export default class MainContent extends React.Component {
             {
                 // console.log("Refreshing");
                 document.body.classList.add('refreshing');
-                this.fetchRss(this.props, false);
+                this.fetchRss(false);
                 this.startY = null; // Until the next touchstart
             }
         }, { passive: true });
     }
 
-    fetchRss(props, useStored = true) {
+    fetchRss(useStored = true) {
+        const props = this.props;
         if (!props.selected) return;
         // Fetch
         if (useStored) {
@@ -94,7 +104,7 @@ export default class MainContent extends React.Component {
             // console.log(json);
             this.setState({
                 loading: false,
-                data: json.channel
+                data: json.channel,
             });
 
             this.props.onRssFetched(props.selected, this.state.data);
@@ -103,7 +113,7 @@ export default class MainContent extends React.Component {
             this.setState({
                 error: e.message,
                 loading: false,
-                data: null
+                data: null,
             });
         });
     }

@@ -15,36 +15,25 @@ export default class Editor extends React.Component {
     }
 
     componentDidMount() {
-        this.fillState(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        // Compare editor site
-        if ( (nextProps.editorSite === null && this.props.id !== "") ||
-                nextProps.editorSite._id !== this.props.id ) {
-            this.fillState(nextProps);
-        }
-        // console.log("Receiving props");
-        setTimeout(() => {
+        this.fillState(this.props, () => {
             this.refs.input.focus();
             this.refs.input.select();
-        }, 25);
-
+        });
     }
 
-    fillState(props) {
+    fillState(props, cb) {
         if (props.editorSite != null) {
             this.setState({
                 title: props.editorSite.title,
                 url: props.editorSite.url,
                 id: props.editorSite._id
-            });
+            }, cb);
         } else {
             this.setState({
                 title: "",
                 id: "",
                 url: ""
-            });
+            }, cb);
         }
     }
 

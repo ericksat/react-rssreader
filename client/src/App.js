@@ -25,11 +25,12 @@ class App extends Component {
         this.state = {
             sites: [],
             selectedSite: null,
+            // Will be used to force-refresh main view
+            selectedSiteKey: "start",
             selectedSiteTitle: null,
             selectedSiteId: null,
             editorOpen: false,
             editorSite: null,
-            forceRefresh: false,
             error: "",
             sideBarOn: false,
         }
@@ -46,6 +47,10 @@ class App extends Component {
         this.rssFetched = this.rssFetched.bind(this);
     }
 
+    randomizeKey() {
+        return "K" + Math.floor((Math.random() * 100000) + 1);
+    }
+
     selectSite(id, pushToHistory = true, clearFromStorage = true) {
         // console.log("Selecting site " + id);
         let site = this.state.sites.find((site) => site._id === id);
@@ -58,11 +63,12 @@ class App extends Component {
             selectedSiteTitle: site.title,
             editorOpen: false,
             editorSite: null,
-            forceRefresh: false,
             selectedSiteId: site._id,
         };
-        if (this.state.selectedSite === site.url && !this.state.editorOpen) { // Ask our main content nicely to refresh
-            stateUpdate.forceRefresh = true;
+        if (this.state.selectedSite === site.url && !this.state.editorOpen) { // Ask our main content to force-refresh
+            stateUpdate.selectedSiteKey = site._id + this.randomizeKey();
+        } else {
+            stateUpdate.selectedSiteKey = site._id;
         }
 
         stateUpdate.sideBarOn = !this.viewModeMobile;
@@ -84,7 +90,7 @@ class App extends Component {
     /** Used by storage to lead to a redraw */
     storageUpdatedSites(sites) {
         console.log("App:updateSites called");
-        this.setState({ sites, forceRefresh: false }, () => {
+        this.setState({ sites }, () => {
             if (window.location.pathname !== "/") {
                 let title = decodeURIComponent(window.location.pathname.substr(1));
                 // console.log("Title = " + title);
@@ -256,9 +262,13 @@ class App extends Component {
                 <Header title="Shmoofel's RSS Reader&trade;" onMenu={this.toggleSidebar.bind(this)} />
                 <SideBar sites={this.state.sites} show={this.state.sideBarOn} selected={this.state.selectedSiteId}
                 selectSite={this.selectSite} deleteSite={this.deleteSite} editSite={this.openEditSite} onAddSite={this.openAddSite} />
-                <Editor show={this.state.editorOpen} sideBarOn={this.state.sideBarOn} error={this.state.error} editorSite={this.state.editorSite} refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite} />
+                <Editor show={this.state.editorOpen} sideBarOn={this.state.sideBarOn}
+                    key={this.state.editorSite ? this.state.editorSite._id : "E" + (Math.floor(Math.random() * 1000) + 1) }
+                    error={this.state.error} editorSite={this.state.editorSite}
+                    refreshParent={this.fetchSites} onCancel={this.closeEditor} saveSite={this.saveSite}
+                />
                 <MainContent sideBarOn={this.state.sideBarOn} show={!this.state.editorOpen} selected={this.state.selectedSite} storage={this.storage}
-                            selectedTitle={this.state.selectedSiteTitle} onRssFetched={this.rssFetched} forceRefresh={this.state.forceRefresh} />
+                            selectedTitle={this.state.selectedSiteTitle} onRssFetched={this.rssFetched} siteKey={this.state.selectedSiteKey} />
                 <Footer content="RSS Reader&trade; &copy;2019 By Shmoofel Media, Powered by React and Node.js" />
             </div>
         );

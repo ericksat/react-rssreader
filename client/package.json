@@ -1,6 +1,6 @@
 {
-  "name": "hello-react",
-  "version": "0.1.0",
+  "name": "rss-reader-client",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "moment": "^2.24.0",
