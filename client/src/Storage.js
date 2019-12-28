@@ -8,6 +8,9 @@ global.jsonHeaders = {
 
 /** Store sites list and manipulate it client-side */
 export default class Storage {
+    static siteFields = ["title", "url", "_id"];
+    static key = 'sites';
+
     constructor(updateParentCallback) {
         this.storage = window.localStorage;
         // A callback to notify parent it needs to redraw
@@ -17,7 +20,7 @@ export default class Storage {
     }
 
     /** Part of sync process */
-    store() {
+    storeLocally() {
         this.storage.setItem(Storage.key, JSON.stringify(this.sites));
     }
 
@@ -67,13 +70,14 @@ export default class Storage {
             if (this.siteCompare(res.sites, this.sites) === false) {
                 console.log("Updating sites from server.");
                 this.sites = res.sites;
-                this.store();
+                this.storeLocally();
+                // Need to be initialized before the parent callback is called
+                this.lastReadManager = new LastReadManager(this.sites, this.lastReadUpdate.bind(this));
                 this.updateParentCallback(this.sites);
             } else {
                 console.log("Server data matches local. Not touching.");
+                this.lastReadManager = new LastReadManager(this.sites, this.lastReadUpdate.bind(this));
             }
-            // Either way initialize the LastRead manager object.
-            this.lastReadManager = new LastReadManager(this.sites, this.lastReadUpdate.bind(this));
         }).catch((err) => {
             throw new Error(err.message);
         })
@@ -85,7 +89,7 @@ export default class Storage {
      */
     rollback(lastSites) {
         this.sites = lastSites;
-        this.store();
+        this.storeLocally();
         this.updateParentCallback(this.sites);
     }
 
@@ -164,7 +168,7 @@ export default class Storage {
         old.title = site.title;
         old.url = site.url;
         // Store and notify UI
-        this.store();
+        this.storeLocally();
         this.updateParentCallback(this.sites);
     }
 
@@ -180,7 +184,7 @@ export default class Storage {
             ...site,
             lastRead: new LastReadInfo(),
         });
-        this.store();
+        this.storeLocally();
         this.updateParentCallback(this.sites);
         return _id;
     }
@@ -194,7 +198,7 @@ export default class Storage {
         let pos = this.sites.findIndex((site) => site._id === tempId);
         if (pos) {
             this.sites[pos]._id = remoteId;
-            this.store();
+            this.storeLocally();
             this.updateParentCallback(this.sites);
             // console.log(`Updated tempID ${tempId} to ${remoteId}`);
         }
@@ -204,7 +208,7 @@ export default class Storage {
         let lastSites = Object.assign(this.sites); // Keep copy in case of server error
         let pos = this.sites.findIndex((site) => site._id === siteId);
         this.sites.splice(pos, 1);
-        this.store();
+        this.storeLocally();
         // console.log("Updating parent");
         this.updateParentCallback(this.sites);
         // Now update the server
@@ -227,7 +231,7 @@ export default class Storage {
 
     updateLastRead(url, data) {
         if (this.lastReadManager.updateLastRead(url, data) === true) { // Count was updated, and so we need a refresh
-            this.store();
+            this.storeLocally();
             this.updateParentCallback(this.sites);
         }
     }
@@ -236,7 +240,7 @@ export default class Storage {
      * A notification from child to parent to notify of data change that requires storing and UI refresh
      */
     lastReadUpdate() {
-        this.store(); // Store in session/local-storage.
+        this.storeLocally(); // Store in session/local-storage.
         this.updateParentCallback(this.sites); // Update the UI
     }
 
@@ -258,6 +262,3 @@ export default class Storage {
         }
     }
 }
-
-Storage.siteFields = ["title", "url", "_id"];
-Storage.key = 'sites';
