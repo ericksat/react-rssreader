@@ -21,7 +21,7 @@
     "express": "^4.17.1",
     "js-base64": "^2.6.4",
     "mongodb": "^3.6.1",
-    "mongoose": "^5.10.3",
+    "mongoose": "^5.12.6",
     "rss-parser": "^3.9.0"
   },
   "devDependencies": {
